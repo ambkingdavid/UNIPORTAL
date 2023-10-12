@@ -1,0 +1,17 @@
+{
+  "name": "uniportal",
+  "version": "1.0.0",
+  "description": "the doorway to campus",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kelvin Wooldbridge and Benjamin Princewill",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
