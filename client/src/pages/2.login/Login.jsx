@@ -1,7 +1,8 @@
-import { useState } from "react"
-import { login } from "../../slices/userSlice";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import uniportal from '../../assets/uniportal.jpg'
+import { login } from "../../slices/userSlice";
+import uniportal from "../../assets/uniportal.jpg";
+import axios from "axios";
 
 export default function Login() {
   const [name, setName] = useState("");
@@ -9,14 +10,23 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(login({
-      name: name,
-      password: password,
-      loggedIn: true,
-    }));
+    try {
+      // MakeHTTP request using Axios
+      const response = await axios.post("your api endpoint", {
+        name: name,
+        password: password,
+      });
+
+      // if the response contains user data, dispatch the login action
+      dispatch(login(response.data));
+
+    } catch (error) {
+      // Handle errors, e.g., show an error message
+      console.error("Login failed: ", error);
+    }
   };
 
 

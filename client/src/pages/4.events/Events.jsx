@@ -1,10 +1,11 @@
-import Logout from "../../components/body/Logout"
+
+import Sidebar from "../../components/body/Sidebar"
 
 const events = () => {
     return (
-      <div className="text-center">
+      <div className="flex flex-row text-center">
+     <Sidebar/>
         events
-        <Logout/>
       </div>
     )
   }
