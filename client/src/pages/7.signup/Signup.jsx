@@ -7,6 +7,7 @@ import { signup, cancel } from '../../slices/signupSlice';
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
+  const [password, setPassword] = useState("");
   const [emailaddress, setEmailaddress] = useState("");
   const [country, setCountry] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
@@ -27,6 +28,7 @@ export default function SignUp() {
     dispatch(signup({
       firstname: firstname,
       lastname: lastname, 
+      password: password,
       emailaddress: emailaddress,
       country: country,
       streetAddress: streetAddress,
@@ -95,6 +97,23 @@ export default function SignUp() {
                   onChange={(e) => setLastname(e.target.value)}
                     id="last-name"
                     autoComplete="family-name"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                  password
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    autoComplete="password"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
