@@ -1,12 +1,10 @@
-import { useHistory } from 'react-router-dom';
+
 
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { signup, cancel } from '../../slices/signupSlice';
 import axios from 'axios';
-
-
 
 
 export default function SignUp() {
@@ -21,7 +19,6 @@ export default function SignUp() {
   const [postalcode, setPostalcode] = useState("");
 
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -36,7 +33,7 @@ const handleSubmit = (e) => {
     firstname,
     lastname,
     password,
-    emailaddress,
+    email: emailaddress,
     country,
     streetAddress,
     city,
@@ -45,7 +42,7 @@ const handleSubmit = (e) => {
   };
 
   // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
-  axios.post('http://localhost:1245/sign-up', userData)
+  axios.post('http://localhost:1245/signup', userData)
     .then((response) => {
       // Handle the response from the server here
       console.log('Successful response:', response.data);
@@ -57,8 +54,6 @@ const handleSubmit = (e) => {
       // Handle any errors here
       console.error('Error:', error);
     });
-
-    history.push('/login');
 };
 
   return (
