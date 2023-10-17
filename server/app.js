@@ -7,6 +7,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
 const SQLiteStore = require('connect-sqlite3')(session);
+const cors = require('cors');
 
 const indexRouter = require('./routes/indexRoutes');
 const authRouter = require('./routes/authRoutes');
@@ -15,6 +16,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
