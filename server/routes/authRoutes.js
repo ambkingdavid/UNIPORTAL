@@ -9,7 +9,7 @@ router.post('/login', passport.authenticate('local'),
 router.post('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) { return next(err); }
-    return res.redirect('/');
+    return res.status(200).send('User is logged out');
   });
 });
 
