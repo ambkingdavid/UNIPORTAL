@@ -5,7 +5,7 @@ import uniportal from "../../assets/uniportal.jpg";
 import axios from "axios";
 
 export default function Login() {
-  const [name, setName] = useState("");
+  const [email, setEmailaddress] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
@@ -15,8 +15,8 @@ export default function Login() {
 
     try {
       // MakeHTTP request using Axios
-      const response = await axios.post("your api endpoint", {
-        name: name,
+      const response = await axios.post("http://localhost:1245/login", {
+        email: email,
         password: password,
       });
 
@@ -50,15 +50,15 @@ export default function Login() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Username
+                Email
               </label>
               <div className="mt-2">
                 <input
-                  id="name"
-                  name="name"
-                  type="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmailaddress(e.target.value)}
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -103,7 +103,7 @@ export default function Login() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <a href="/SignUp" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Sign up
             </a>
           </p>
