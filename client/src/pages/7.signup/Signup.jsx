@@ -1,9 +1,13 @@
+import { useHistory } from 'react-router-dom';
 
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { signup, cancel } from '../../slices/signupSlice';
 import axios from 'axios';
+
+
+
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -17,6 +21,7 @@ export default function SignUp() {
   const [postalcode, setPostalcode] = useState("");
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -52,6 +57,8 @@ const handleSubmit = (e) => {
       // Handle any errors here
       console.error('Error:', error);
     });
+
+    history.push('/login');
 };
 
   return (
