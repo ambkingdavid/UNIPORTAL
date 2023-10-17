@@ -24,7 +24,7 @@ export default function Login() {
       dispatch(login(response.data));
 
     } catch (error) {
-      // Handle errors, e.g., show an error message
+      //  show an error message
       console.error("Login failed: ", error);
     }
   };
