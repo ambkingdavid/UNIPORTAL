@@ -1,8 +1,11 @@
 
+
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { signup, cancel } from '../../slices/signupSlice';
+import axios from 'axios';
+
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -22,22 +25,37 @@ export default function SignUp() {
     dispatch(cancel());
 };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    dispatch(signup({
-      firstname: firstname,
-      lastname: lastname, 
-      password: password,
-      emailaddress: emailaddress,
-      country: country,
-      streetAddress: streetAddress,
-      city: city,
-      state: state,
-      postalcode: postalcode,
-      loggedIn: true,
-    }));
+  // Create an object with the data to send to the server
+  const userData = {
+    firstname,
+    lastname,
+    password,
+    email: emailaddress,
+    country,
+    streetAddress,
+    city,
+    state,
+    postalcode,
   };
+
+  // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
+  axios.post('http://localhost:1245/signup', userData)
+    .then((response) => {
+      // Handle the response from the server here
+      console.log('Successful response:', response.data);
+
+      //  dispatch Redux actions or perform actions as needed
+      dispatch(signup({ ...userData, loggedIn: true }));
+    })
+    .catch((error) => {
+      // Handle any errors here
+      console.error('Error:', error);
+    });
+};
+
   return (
    <div className="p-6 m-6">
      <div className="space-y-10 divide-y divide-gray-900/10">
