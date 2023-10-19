@@ -42,7 +42,7 @@ const handleSubmit = (e) => {
   };
 
   // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
-  axios.post('http://localhost:1245/signup', userData)
+  axios.post('http://localhost:1245/profile', userData)
     .then((response) => {
       // Handle the response from the server here
       console.log('Successful response:', response.data);

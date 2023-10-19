@@ -4,12 +4,16 @@ import Navbar from './components/header/Navbar'
 import Home from './pages/1.home/Home'
 import About from './pages/5.about/About'
 import Contact from './pages/6.contact/Contact'
-import Events from './pages/4.events/Events'
+import Events from './pages/4.dashboard/Dashboard'
 import Foot from './components/footer/Foot'
-import Login from './pages/2.login/Login'
-import Signup from './pages/7.signup/Signup'
+import Login from './pages/2.0 student_login/Login'
+import Profile from './pages/7.profile/Profile'
 import { selectUser } from './slices/userSlice'
 import { useSelector } from 'react-redux'
+import Dashboard from './pages/4.dashboard/Dashboard'
+import SignUp from './pages/9.signup/Signup'
+import Staff_Login from './pages/2.2 staff_login/Staff_Login'
+import Parent_Login from './pages/2.1 parent_login/Parent_Login'
 
 function App() {
   const user = useSelector(selectUser);
@@ -17,16 +21,19 @@ function App() {
   return (
     <div className= 'w-screen h-screen bg-white'>
       <Router>
-        <Navbar />
+      {location.pathname !== "/Dashboard" ? <Navbar /> : null}
         <Routes>
           <Route exact path='/' element={<Home/>} />
           <Route path='/About' element={<About/>} />
+          <Route path='/Parent' element={<Parent_Login/>} />
+          <Route path='/Staff' element={<Staff_Login/>} />
           <Route path='/Contact' element={<Contact/>} />
           <Route path='/Login' element={user ? <Events/> : <Login/>} />
-          <Route path='/SignUp' element={<Signup/>} />
-          <Route path='/Events' element={<Events/>} />
+          <Route path='/SignUp' element={<SignUp/>} />
+          <Route path='/Profile' element={<Profile/>} />
+          <Route path='/Dashboard' element={<Dashboard/>} />
         </Routes>
-        <Foot />
+        {location.pathname !== "/Dashboard" ? <Foot /> : null}
         </Router>
     </div>
   )

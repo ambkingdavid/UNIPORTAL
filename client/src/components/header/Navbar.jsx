@@ -3,13 +3,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import uniportal from "../../assets/uniportal.jpg";
+import { LogIn } from "lucide-react";
 
 export const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Login", href: "/Login", current: false },
-  { name: "Admissions", href: "/Admissions", current: false },
-  { name: "Signup", href: "/Signup", current: false },
-  { name: "Events", href: "/Events", current: false },
+  // { name: "Login", href: "/Login", current: false },
+  // { name: "Student", href: "/Student", current: false },
+  // { name: "Parent", href: "/Parent", current: false },
+  // { name: "Staff", href: "/Staff", current: false },
   { name: "About", href: "/About", current: false },
   { name: "Contact Us", href: "/Contact", current: false },
 ];
@@ -53,6 +54,77 @@ export default function Example() {
                   </div>
                 </div>
               </div>
+              {
+                location.pathname === "/" ? (
+                  <div className="flex h-9 justify-around gap-2">
+                    <Menu as="div" className="relative ml-4 flex-shrink-0">
+                      <div>
+                        <Menu.Button className="relative flex rounded-md bg-blue-400 text-sm text-white">
+                        <span className="absolute -inset-1.5" />
+                          <div className="flex justify-between items-center bg-transparent border rounded-md gap-2 px-2 py-1.5">
+                      <LogIn/>
+                      Login
+                    </div>
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="/Login"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Student
+                              </a>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="/Parent"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Parent
+                              </a>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="/Staff"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Staff
+                              </a>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                    <button className="px-3 py-1 border rounded-md">
+                      Sign Up
+                    </button>
+                  </div>
+                ) : null
+              }
               {location.pathname !== "/Login" && location.pathname !== "/" ? (
                 <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
                   <div className="w-full max-w-lg lg:max-w-xs">
@@ -127,7 +199,7 @@ export default function Example() {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="#"
+                                href="/Profile"
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
@@ -198,10 +270,10 @@ export default function Example() {
               </Disclosure.Button>
               <Disclosure.Button
                 as="a"
-                href="/Events"
+                href="/Staff"
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
               >
-                Events
+                Staff
               </Disclosure.Button>
               <Disclosure.Button
                 as="a"
@@ -247,7 +319,7 @@ export default function Example() {
                 </Disclosure.Button>
                 <Disclosure.Button
                   as="a"
-                  href="#"
+                  href="/Profile"
                   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                 >
                   Settings
