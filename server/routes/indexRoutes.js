@@ -1,16 +1,18 @@
 const express = require('express');
 const passport = require('passport');
 const AppController = require('../controllers/appController');
-const UserController = require('../controllers/userController');
+const StudentController = require('../controllers/studentController');
+const StaffController = require('../controllers/staffController');
 
 const router = express.Router();
 
 // post requests - CREATE
-router.post('/signup', UserController.addUser);
+router.post('/signup', StudentController.addUser);
 
 // get request - READ
 router.get('/status', AppController.getStatus);
-router.get('/users', passport.authenticate('session'), UserController.getAllUsers);
-router.get('/user/:id', passport.authenticate('session'), UserController.getUser);
+router.get('/staffs', passport.authenticate('session'), StaffController.getAllStaffs);
+router.get('/students', passport.authenticate('session'), StudentController.getAllStudents);
+router.get('/student/:id', passport.authenticate('session'), StudentController.getStudent);
 
 module.exports = router;

@@ -26,6 +26,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' }),
+  cookie: {
+    maxAge: 3600000,
+    httpOnly: true,
+  },
 }));
 
 app.use(passport.authenticate('session'));

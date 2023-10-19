@@ -3,14 +3,13 @@ const { DataTypes } = require('sequelize');
 const dbClient = require('../config/sequelize.config');
 const { customLogger } = require('./helpers');
 
-// User Model
-const User = dbClient.define('User', {
+const Student = dbClient.define('Student', {
   id: {
     type: DataTypes.STRING,
     defaultValue: () => uuidv4(),
     primaryKey: true,
   },
-  username: {
+  matric: {
     type: DataTypes.STRING,
     unique: true,
   },
@@ -22,7 +21,38 @@ const User = dbClient.define('User', {
     type: DataTypes.STRING,
     unique: true,
   },
-  role: DataTypes.STRING,
+  courseOfStudy: DataTypes.STRING,
+  admissionType: DataTypes.STRING,
+  isLoggedIn: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+});
+
+const Staff = dbClient.define('Staff', {
+  id: {
+    type: DataTypes.STRING,
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+  },
+  staffNumber: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  department: DataTypes.STRING,
+  faculty: DataTypes.STRING,
 });
 
 // Profile Model
@@ -32,12 +62,12 @@ const Profile = dbClient.define('Profile', {
     defaultValue: () => uuidv4(),
     primaryKey: true,
   },
-  first_name: DataTypes.STRING,
-  last_name: DataTypes.STRING,
-  date_of_birth: DataTypes.DATE,
+  firstName: DataTypes.STRING,
+  lastName: DataTypes.STRING,
+  dateOfBirth: DataTypes.DATE,
   address: DataTypes.STRING,
-  phone_number: DataTypes.STRING,
-  profile_picture: DataTypes.STRING,
+  phoneNumber: DataTypes.STRING,
+  profilePicture: DataTypes.STRING,
 });
 
 // Course Model
@@ -47,24 +77,24 @@ const Course = dbClient.define('Course', {
     defaultValue: () => uuidv4(),
     primaryKey: true,
   },
-  course_code: DataTypes.STRING,
-  course_name: DataTypes.STRING,
+  courseCode: DataTypes.STRING,
+  courseName: DataTypes.STRING,
   department: DataTypes.STRING,
   description: DataTypes.TEXT,
-  start_date: DataTypes.DATE,
-  end_date: DataTypes.DATE,
-  capacity: DataTypes.INTEGER,
+  startDate: DataTypes.DATE,
+  endDate: DataTypes.DATE,
+  unit: DataTypes.INTEGER,
 });
 
 // Score Model
-const Score = dbClient.define('Score', {
+const Result = dbClient.define('Result', {
   id: {
     type: DataTypes.STRING,
     defaultValue: () => uuidv4(),
     primaryKey: true,
   },
   score: DataTypes.INTEGER,
-  date_completed: DataTypes.DATE,
+  dateCompleted: DataTypes.DATE,
   remarks: DataTypes.STRING,
 });
 
@@ -77,26 +107,21 @@ const Library = dbClient.define('Library', {
   },
   title: DataTypes.STRING,
   description: DataTypes.TEXT,
-  file_url: DataTypes.STRING,
+  fileUrl: DataTypes.STRING,
 });
 
-// Define relationships between the models
-User.hasOne(Profile);
-Profile.belongsTo(User);
+Student.hasOne(Profile, { foreignKey: 'studentId' });
+Profile.belongsTo(Student, { foreignKey: 'studentId' });
 
-Course.belongsTo(User, { as: 'professor' });
-User.hasMany(Course, { as: 'courses' });
+Course.belongsTo(Student);
+Student.hasMany(Course, { as: 'courses' });
 
-User.hasMany(Score);
-Score.belongsTo(User);
-
-Course.hasMany(Score);
-Score.belongsTo(Course);
+Student.hasMany(Result, { as: 'results' });
+Result.belongsTo(Student);
 
 Course.hasMany(Library);
 Library.belongsTo(Course);
 
-// Synchronize the models with the database
 dbClient.afterDefine((model) => {
   const logMessage = `[Table Created] Table "${model.name}" has been defined.`;
   customLogger(logMessage);
@@ -114,9 +139,10 @@ dbClient.afterDefine((model) => {
 })();
 
 module.exports = {
-  User,
+  Student,
+  Staff,
   Profile,
   Course,
-  Score,
+  Result,
   Library,
 };
