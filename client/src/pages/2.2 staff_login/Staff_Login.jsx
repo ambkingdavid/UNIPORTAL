@@ -4,7 +4,7 @@ import { login } from "../../slices/userSlice";
 import uniportal from "../../assets/uniportal.jpg";
 import axios from "axios";
 
-export default function Login() {
+export default function Staff_Login() {
   const [email, setEmailaddress] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,20 +15,18 @@ export default function Login() {
 
     try {
       // MakeHTTP request using Axios
-      const response = await axios.post("http://localhost:1245/login", {
+      const response = await axios.post("http://localhost:1245/staff/login", {
         username: email,
         password: password,
       });
 
       // if the response contains user data, dispatch the login action
       dispatch(login(response.data));
-
     } catch (error) {
       //  show an error message
-      console.error("Login failed: ", error);
+      console.error("Staff_Login failed: ", error);
     }
   };
-
 
   return (
     <>
@@ -39,24 +37,25 @@ export default function Login() {
             src={uniportal}
             alt="Your Company"
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+          <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Staff Signin
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST"
-            onSubmit={(e) => handleSubmit(e)}>
-
+        <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form
+            className="space-y-6"
+            action="#"
+            method="POST"
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email
-              </label>
-              <div className="mt-2">
+              <div>
                 <input
                   id="email"
                   name="email"
                   type="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmailaddress(e.target.value)}
                   autoComplete="email"
@@ -67,27 +66,26 @@ export default function Login() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
               <div className="mt-2">
                 <input
                   id="password"
                   name="password"
                   type="password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+              </div>
+              <div className="text-sm">
+                <a
+                  href="#"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                >
+                  Forgot password?
+                </a>
               </div>
             </div>
 
@@ -102,13 +100,16 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <a href="/SignUp" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            Not a member?{" "}
+            <a
+              href="/SignUp"
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
               Sign up
             </a>
           </p>
         </div>
       </div>
     </>
-  )
+  );
 }
