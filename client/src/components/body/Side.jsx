@@ -1,13 +1,41 @@
 
 import { ChevronFirst, ChevronLast } from "lucide-react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import uniportal from "../../assets/uniportal.jpg"
 import Logout from "../../components/body/Logout"
 import PropTypes from "prop-types";
+import axios from "axios";
 
 const SidebarContext = createContext();
+const url = "http://localhost:1245/users";
+
+
+
+
+
 export default function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(true);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+
+    const getProfile = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+        return data;
+      } catch (error) {
+        console.error("Profile fetch failed: ", error);
+      }
+    };
+    
+    useEffect(() => {
+      getProfile().then((data) => {
+        if (data) {
+        setName(data.username);
+        setEmail(data.email);
+        }
+      });
+    }, []);
 
   return (
     <aside className="h-screen">
@@ -40,8 +68,8 @@ export default function Sidebar({ children }) {
                 expanded? "w-52 ml-3" : "w-0"
             }`}>
             <div className="leading-4">
-              <h4 className="font-semibold">Benjamin</h4>
-              <span className="text-xs t text-gray-600">benjamin@mail.com</span>
+              <h4 className="font-semibold">{name}</h4>
+              <span className="text-xs t text-gray-600">{email}</span>
             </div>
             <div className="mt-1.5"> <Logout/> </div>
           </div>
@@ -93,12 +121,11 @@ export function SideBarItem({ icon, text, active, }) {
 }
 
 SideBarItem.propTypes = {
-    text: <PropTypes className="string"/>,
-    active: <PropTypes className="bool"/>,
-    icon: <PropTypes className="symbol"/>,
-    // href: <PropTypes className="string"/>
+    text: PropTypes.any,
+    active: PropTypes.any,
+    icon: PropTypes.any
 }
 
 Sidebar.propTypes = {
-    children: <PropTypes className="any"/>
+    children: PropTypes.any,
 }

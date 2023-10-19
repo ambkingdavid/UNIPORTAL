@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       // MakeHTTP request using Axios
-      const response = await axios.post("http://localhost:1245/student/login", {
+      const response = await axios.post("http://localhost:1245/login", {
         username: email,
         password: password,
       });
