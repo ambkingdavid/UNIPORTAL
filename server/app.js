@@ -16,7 +16,10 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,6 +34,9 @@ app.use(session({
     httpOnly: true,
   },
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(passport.authenticate('session'));
 
