@@ -53,6 +53,10 @@ const Staff = dbClient.define('Staff', {
   },
   department: DataTypes.STRING,
   faculty: DataTypes.STRING,
+  isLoggedIn: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 // Profile Model

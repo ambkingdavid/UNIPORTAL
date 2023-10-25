@@ -10,6 +10,23 @@ class StaffController {
     }
   }
 
+  static async getMe(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+    const staffId = req.user.id;
+
+    const staff = Staff.findOne({
+      id: staffId,
+    });
+
+    if (!staff || !staff.isLoggedIn) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(200).send({ loggedIn: true });
+  }
+
   static async getAllStaffs(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');

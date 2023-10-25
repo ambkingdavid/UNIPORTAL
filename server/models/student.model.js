@@ -47,7 +47,12 @@ class Student {
   */
   static async findAll(query = {}) {
     const students = await dbClient.findAll(query);
-    return students;
+
+    const studentsData = students.map(user => {
+      const { password, createdAt, updatedAt, ...studentData } = user.dataValues;
+    });
+
+    return studentsData;
   }
 
   /**
@@ -64,7 +69,10 @@ class Student {
     if (!user) {
       return null;
     }
-    return user.dataValues;
+
+    const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...userData } = user.dataValues;
+
+    return userData;
   }
 
   /**
@@ -85,10 +93,14 @@ class Student {
         throw new Error('User not found');
       }
       const profile = await user.getProfile();
-
+  
+      const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...userData } = user.dataValues;
+  
+      const { createdAt: profileCreatedAt, updatedAt: profileUpdatedAt, ...profileData } = profile.dataValues;
+  
       return {
-        user: user.dataValues,
-        profile: profile.dataValues,
+        user: userData,
+        profile: profileData,
       };
     } catch (err) {
       throw err;
