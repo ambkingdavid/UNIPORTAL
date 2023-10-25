@@ -26,7 +26,11 @@ class Staff {
     if (staffs.length === 0) {
       throw new Error('No staffs found');
     }
-    return staffs;
+    const staffsData = staffs.map(staff => {
+      const { password, createdAt, updatedAt, ...staffData } = staff.dataValues;
+    });
+
+    return staffsData;
   }
 
   static async findStaff(query) {
@@ -34,7 +38,9 @@ class Staff {
     if (!staff) {
       throw new Error('No staff found');
     }
-    return staff;
+    const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...staffData } = staff.dataValues;
+
+    return staffData;
   }
 
   static async findByStaffNumber(staffNumber) {
@@ -47,7 +53,9 @@ class Staff {
       if (!staff) {
         throw new Error('User not found');
       }
-      return staff.dataValues;
+      const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...staffData } = staff.dataValues;
+
+      return staffData;
     } catch (err) {
       throw err;
     }

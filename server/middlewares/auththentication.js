@@ -5,7 +5,7 @@ const Student = require('../models/student.model');
 const Staff = require('../models/staff.model');
 
 passport.use('local', new LocalStrategy({
-  passReqToCallback: true, // set to access the request data
+  passReqToCallback: true,
 }, async (req, username, password, cb) => {
   try {
     const portal = req.params.portal;

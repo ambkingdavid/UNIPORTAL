@@ -19,6 +19,23 @@ class StudentController {
     return res.status(200).send({ id: student });
   }
 
+  static async getMe(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+    const studentId = req.user.id;
+
+    const student = Student.findOne({
+      id: studentId,
+    });
+
+    if (!student || !student.isLoggedIn) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(200).send({ loggedIn: true });
+  }
+
   static async getAllStudents(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
