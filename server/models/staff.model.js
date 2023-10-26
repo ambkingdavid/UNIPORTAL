@@ -1,4 +1,6 @@
-const dbClient = require('../utils/db').Staff
+const dbClient = require('../utils/db').Staff;
+const { hashPassword } = require('../utils/helpers');
+const { customLogger } = require('../utils/helpers');
 
 class Staff {
   static async add(data) {
@@ -26,8 +28,14 @@ class Staff {
     if (staffs.length === 0) {
       throw new Error('No staffs found');
     }
-    const staffsData = staffs.map(staff => {
-      const { password, createdAt, updatedAt, ...staffData } = staff.dataValues;
+    const staffsData = staffs.map((staff) => {
+      const {
+        password,
+        createdAt,
+        updatedAt,
+        ...staffData
+      } = staff.dataValues;
+      return staffData;
     });
 
     return staffsData;
@@ -38,73 +46,70 @@ class Staff {
     if (!staff) {
       throw new Error('No staff found');
     }
-    const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...staffData } = staff.dataValues;
+    const {
+      password,
+      createdAt: userCreatedAt,
+      updatedAt: userUpdatedAt,
+      ...staffData
+    } = staff.dataValues;
 
     return staffData;
   }
 
   static async findByStaffNumber(staffNumber) {
-    try {
-      const staff = await dbClient.findOne({
-        where: {
-          staffNumber,
-        },
-      });
-      if (!staff) {
-        throw new Error('User not found');
-      }
-      const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...staffData } = staff.dataValues;
-
-      return staffData;
-    } catch (err) {
-      throw err;
+    const staff = await dbClient.findOne({
+      where: {
+        staffNumber,
+      },
+    });
+    if (!staff) {
+      throw new Error('User not found');
     }
+    const {
+      password,
+      createdAt: userCreatedAt,
+      updatedAt: userUpdatedAt,
+      ...staffData
+    } = staff.dataValues;
+
+    return staffData;
   }
 
   static async updateLoginStatus(staffId, query) {
-    try {
-      const staff = await dbClient.findByPk(staffId);
+    const staff = await dbClient.findByPk(staffId);
 
-      if (!staff) {
-        throw new Error('User not found');
-      }
-
-      Object.assign(staff, query);
-
-      await staff.save();
-      return staff.isLoggedIn;
-    } catch (err) {
-      throw err
+    if (!staff) {
+      throw new Error('User not found');
     }
+
+    Object.assign(staff, query);
+
+    await staff.save();
+    return staff.isLoggedIn;
   }
 
-
   static async changePassword(staffId, data) {
-    try {
-      const staff = await dbClient.findByPk(userId);
+    const staff = await dbClient.findByPk(staffId);
 
-      if (!staff) {
-        throw new Error('Staff not found');
-      }
-
-      if (data.email !== staff.email) {
-        throw new Error('Incorrect email');
-      }
-
-      const newPassword = await hashPassword(data.password);
-
-      const updatedPassword = {
-        password: newPassword,
-      };
-
-      Object.assign(staff, updatedPassword);
-
-      await staff.save();
-
-      return user.id;
-    } catch (error) {
-      throw error;
+    if (!staff) {
+      throw new Error('Staff not found');
     }
+
+    if (data.email !== staff.email) {
+      throw new Error('Incorrect email');
+    }
+
+    const newPassword = await hashPassword(data.password);
+
+    const updatedPassword = {
+      password: newPassword,
+    };
+
+    Object.assign(staff, updatedPassword);
+
+    await staff.save();
+
+    return staff.id;
   }
 }
 

@@ -3,10 +3,10 @@ const Staff = require('../models/staff.model');
 class StaffController {
   static async addStaff(req, res) {
     try {
-      const staff = await Staff.add(req.body);
+      await Staff.add(req.body);
       res.status(200).send('Success');
     } catch (err) {
-      res.status(500).send('Error: Server error')
+      res.status(500).send('Error: Server error');
     }
   }
 
@@ -39,7 +39,7 @@ class StaffController {
       limit: +limit,
       offset,
     });
-    return res.status(200).send(users);
+    return res.status(200).send(staffs);
   }
 
   static async getStaff(req, res) {

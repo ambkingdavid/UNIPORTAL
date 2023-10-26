@@ -8,7 +8,7 @@ passport.use('local', new LocalStrategy({
   passReqToCallback: true,
 }, async (req, username, password, cb) => {
   try {
-    const portal = req.params.portal;
+    const { portal } = req.params;
     let data;
 
     if (portal === 'student' || portal === 'parent') {
@@ -37,7 +37,7 @@ passport.use('local', new LocalStrategy({
 
     return cb(null, false, { message: 'Incorrect username' });
   } catch (err) {
-    return cb(null, false, { message: 'No user with this matric'});
+    return cb(null, false, { message: 'No user with this matric' });
   }
 }));
 

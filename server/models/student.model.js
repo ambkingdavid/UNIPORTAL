@@ -1,7 +1,7 @@
 // student model
 const dbClient = require('../utils/db').Student;
 const Profile = require('./profile.model');
-const { hashPassword, formatDate } = require('../utils/helpers');
+const { hashPassword } = require('../utils/helpers');
 const { customLogger } = require('../utils/helpers');
 
 class Student {
@@ -48,8 +48,14 @@ class Student {
   static async findAll(query = {}) {
     const students = await dbClient.findAll(query);
 
-    const studentsData = students.map(user => {
-      const { password, createdAt, updatedAt, ...studentData } = user.dataValues;
+    const studentsData = students.map((user) => {
+      const {
+        password,
+        createdAt,
+        updatedAt,
+        ...studentData
+      } = user.dataValues;
+      return studentData;
     });
 
     return studentsData;
@@ -70,7 +76,12 @@ class Student {
       return null;
     }
 
-    const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...userData } = user.dataValues;
+    const {
+      password,
+      createdAt: userCreatedAt,
+      updatedAt: userUpdatedAt,
+      ...userData
+    } = user.dataValues;
 
     return userData;
   }
@@ -78,78 +89,79 @@ class Student {
   /**
    * Finds a student in the datbase based on matric number
    *
-   * @params {Object} query - the username or email
+   * @params {Object} query - the student's matric
    * @returns {Promise<User>} A promise that resolves to a student object.
    * @throws {Error} if there is an error while fetching student
    */
   static async findByMatric(matric) {
-    try {
-      const user = await dbClient.findOne({
-        where: {
-          matric,
-        },
-      });
-      if (!user) {
-        throw new Error('User not found');
-      }
-      const profile = await user.getProfile();
-  
-      const { password, createdAt: userCreatedAt, updatedAt: userUpdatedAt, ...userData } = user.dataValues;
-  
-      const { createdAt: profileCreatedAt, updatedAt: profileUpdatedAt, ...profileData } = profile.dataValues;
-  
-      return {
-        user: userData,
-        profile: profileData,
-      };
-    } catch (err) {
-      throw err;
+    const student = await dbClient.findOne({
+      where: matric,
+    });
+    if (!student) {
+      throw new Error('User not found');
     }
+    const profile = await student.getProfile();
+
+    const {
+      password,
+      createdAt: studentCreatedAt,
+      updatedAt: studentUpdatedAt,
+      ...studentData
+    } = student.dataValues;
+
+    const {
+      createdAt: profileCreatedAt,
+      updatedAt: profileUpdatedAt,
+      ...StudentProfile
+    } = profile.dataValues;
+
+    return {
+      user: studentData,
+      profile: StudentProfile,
+    };
   }
 
   static async updateLoginStatus(studentId, query) {
-    try {
-      const student = await dbClient.findByPk(studentId);
+    const student = await dbClient.findByPk(studentId);
 
-      if (!student) {
-        throw new Error('User not found');
-      }
-
-      Object.assign(student, query);
-
-      await student.save();
-      return student.isLoggedIn;
-    } catch (err) {
-      throw err
+    if (!student) {
+      throw new Error('User not found');
     }
+
+    Object.assign(student, query);
+
+    await student.save();
+    const {
+      password,
+      createdAt: studentCreatedAt,
+      updatedAt: studentUpdatedAt,
+      ...studentData
+    } = student.dataValues;
+    return studentData;
   }
 
   static async changePassword(userId, data) {
-    try {
-      const user = await dbClient.findByPk(userId);
+    const user = await dbClient.findByPk(userId);
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (data.email !== user.email) {
-        throw new Error('Incorrect email');
-      }
-
-      const newPassword = await hashPassword(data.password);
-  
-      const updatedPassword = {
-        password: newPassword,
-      };
-
-      Object.assign(user, updatedPassword);
-
-      await user.save();
-  
-      return user.id;
-    } catch (error) {
-      throw error;
+    if (!user) {
+      throw new Error('User not found');
     }
+
+    if (data.email !== user.email) {
+      throw new Error('Incorrect email');
+    }
+
+    const newPassword = await hashPassword(data.password);
+
+    const updatedPassword = {
+      password: newPassword,
+    };
+
+    Object.assign(user, updatedPassword);
+
+    await user.save();
+
+    return user.id;
   }
 }
 
