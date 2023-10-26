@@ -1,4 +1,5 @@
 // student model
+const bcrypt = require('bcrypt');
 const dbClient = require('../utils/db').Student;
 const Profile = require('./profile.model');
 const { hashPassword } = require('../utils/helpers');
@@ -138,6 +139,20 @@ class Student {
       ...studentData
     } = student.dataValues;
     return studentData;
+  }
+
+  static async validatePassword(studentId, password) {
+    const student = await dbClient.findByPk(studentId);
+
+    if (!student) {
+      return false;
+    }
+
+    if (!bcrypt.compareSync(password, student.password)) {
+      return false;
+    }
+
+    return true;
   }
 
   static async changePassword(userId, data) {
