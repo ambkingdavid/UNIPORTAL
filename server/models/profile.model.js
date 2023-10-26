@@ -1,5 +1,4 @@
 const { Student, Profile } = require('../utils/db');
-const { customLogger } = require('../utils/helpers');
 
 class StudentProfile {
   static async createProfile(userId, profileData) {
@@ -9,14 +8,10 @@ class StudentProfile {
     }
 
     // Create a new profile for the user
-    try {
-      const profile = await Profile.create(profileData);
-      await user.setProfile(profile);
+    const profile = await Profile.create(profileData);
+    await user.setProfile(profile);
 
-      return profile;
-    } catch (err) {
-      throw err;
-    }
+    return profile;
   }
 
   static async get(userId) {
@@ -30,31 +25,27 @@ class StudentProfile {
   }
 
   static async update(userId, updatedProfileData) {
-    try {
-      // Find the user
-      const user = await Student.findByPk(userId);
+    // Find the user
+    const user = await Student.findByPk(userId);
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      // Get the associated profile
-      const profile = await user.getProfile();
-
-      if (!profile) {
-        throw new Error('User does not have a profile');
-      }
-
-      // Update the profile data
-      Object.assign(profile, updatedProfileData);
-
-      // Save the changes to the database
-      await profile.save();
-
-      return profile;
-    } catch (error) {
-      throw error;
+    if (!user) {
+      throw new Error('User not found');
     }
+
+    // Get the associated profile
+    const profile = await user.getProfile();
+
+    if (!profile) {
+      throw new Error('User does not have a profile');
+    }
+
+    // Update the profile data
+    Object.assign(profile, updatedProfileData);
+
+    // Save the changes to the database
+    await profile.save();
+
+    return profile;
   }
 }
 

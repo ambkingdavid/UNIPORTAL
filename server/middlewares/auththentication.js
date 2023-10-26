@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const bcrypt = require('bcrypt');
 const Student = require('../models/student.model');
 const Staff = require('../models/staff.model');
 
@@ -8,17 +7,22 @@ passport.use('local', new LocalStrategy({
   passReqToCallback: true,
 }, async (req, username, password, cb) => {
   try {
-    const portal = req.params.portal;
+    const { portal } = req.params;
     let data;
 
     if (portal === 'student' || portal === 'parent') {
-      data = await Student.findByMatric(username);
+      data = await Student.findByMatric({ matric: username });
+      if (data && !Student.validatePassword(data.user.id, password)) {
+        return cb(null, false, { message: 'Incorrect password' });
+      }
     } else if (portal === 'staff') {
-      data = await Staff.findByStaffNumber(username);
+      data = await Staff.findByStaffNumber({ staffNumber: username });
+      if (data && !Student.validatePassword(data.user.id, password)) {
+        return cb(null, false, { message: 'Incorrect password' });
+      }
     }
 
-    if (data.user.isLoggedIn) {
-      // User is already logged in, prevent multiple logins
+    if (data && data.user.isLoggedIn === true) {
       return cb(null, false, { message: 'User is already logged in.' });
     }
 
@@ -28,16 +32,9 @@ passport.use('local', new LocalStrategy({
       await Staff.updateLoginStatus(data.user.id, { isLoggedIn: true });
     }
 
-    if (data) {
-      if (!bcrypt.compareSync(password, data.user.password)) {
-        return cb(null, false, { message: 'Incorrect password' });
-      }
-      return cb(null, data);
-    }
-
-    return cb(null, false, { message: 'Incorrect username' });
+    return cb(null, data);
   } catch (err) {
-    return cb(null, false, { message: 'No user with this matric'});
+    return cb(null, false, { message: 'No user with this matric' });
   }
 }));
 

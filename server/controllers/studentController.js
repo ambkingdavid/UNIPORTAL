@@ -1,5 +1,5 @@
 const Student = require('../models/student.model');
-const Profile = require('../models/profile.model')
+const Profile = require('../models/profile.model');
 
 class StudentController {
   static async addUser(req, res) {

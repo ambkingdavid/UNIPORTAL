@@ -12,11 +12,13 @@ router.post('/:portal/logout', async (req, res, next) => {
   if (req.user && req.user.id) {
     const userId = req.user.id;
     const { portal } = req.params;
-    req.logout(async (err) => {
-      if (err) { return next(err); }
-    });
+    try {
+      req.logout();
+    } catch (err) {
+      next(err);
+    }
     if (portal === 'student' || portal === 'parent') {
-      await Student.updateLoginStatus(userId, { isLoggedIn: false })
+      await Student.updateLoginStatus(userId, { isLoggedIn: false });
     } else {
       await Staff.updateLoginStatus(userId, { isLoggedIn: false });
     }
