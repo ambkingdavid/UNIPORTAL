@@ -1,41 +1,18 @@
-
 import { ChevronFirst, ChevronLast } from "lucide-react";
-import { createContext, useContext, useEffect, useState } from "react";
-import uniportal from "../../assets/uniportal.jpg"
-import Logout from "../../components/body/Logout"
+import { createContext, useContext, useState } from "react";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import uniportal from "../../assets/uniportal.jpg";
+import Logout from "./Logout";
 import PropTypes from "prop-types";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 const SidebarContext = createContext();
-const url = "http://localhost:1245/users";
-
-
-
-
 
 export default function Sidebar({ children }) {
-    const [expanded, setExpanded] = useState(true);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-
-    const getProfile = async () => {
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        return data;
-      } catch (error) {
-        console.error("Profile fetch failed: ", error);
-      }
-    };
-    
-    useEffect(() => {
-      getProfile().then((data) => {
-        if (data) {
-        setName(data.username);
-        setEmail(data.email);
-        }
-      });
-    }, []);
+  const [expanded, setExpanded] = useState(true);
+  const userData = useSelector((state) => state.user);
+  const profileName = userData.user.email;
+  const profileEmail = userData.user.email;
 
   return (
     <aside className="h-screen">
@@ -44,17 +21,20 @@ export default function Sidebar({ children }) {
           <img
             src={uniportal}
             className={`overflow-hidden transition-all ${
-                expanded? "w-12" : "w-0"
+              expanded ? "w-12" : "w-0"
             }`}
             alt=""
           />
-          <button onClick={() => setExpanded(curr => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
-            {expanded?<ChevronFirst /> : <ChevronLast/>}
+          <button
+            onClick={() => setExpanded((curr) => !curr)}
+            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+          >
+            {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
 
-        <SidebarContext.Provider value={{expanded}}>
-        <ul className="flex-1 px-3">{children}</ul>
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
         <div className="border-t flex p-3">
@@ -64,28 +44,29 @@ export default function Sidebar({ children }) {
             alt=""
           />
 
-          <div className={`flex flex-row justify-around overflow-hidden transition-all ${
-                expanded? "w-52 ml-3" : "w-0"
-            }`}>
+          <div
+            className={`flex flex-row justify-around overflow-hidden transition-all ${
+              expanded ? "w-52 ml-3" : "w-0"
+            }`}
+          >
             <div className="leading-4">
-              <h4 className="font-semibold">{name}</h4>
-              <span className="text-xs t text-gray-600">{email}</span>
+              <h4 className="font-semibold">{profileName}</h4>
+              <span className="text-xs t text-gray-600">{profileEmail}</span>
             </div>
-            <div className="mt-1.5"> <Logout/> </div>
+            <div className="mt-1.5">
+              {" "}
+              <Logout />{" "}
+            </div>
           </div>
-
-          
         </div>
       </nav>
     </aside>
   );
 }
 
-export function SideBarItem({ icon, text, active, }) {
-    const {expanded} = useContext(SidebarContext)
+export function SideBarItem({ icon, text, href, active }) {
+  const { expanded } = useContext(SidebarContext);
 
-//     // Check if the `text` prop is an object with `content` and `href`
-//   const isLink = typeof text === 'object' && text.hasOwnProperty('content') && text.hasOwnProperty('href');
   return (
     <li
       className={`
@@ -98,34 +79,33 @@ export function SideBarItem({ icon, text, active, }) {
         `}
     >
       {icon}
-      {/*Render a link if `text` is an object with `content` and `href` */}
-      {/* {isLink ? (
-        <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}> <a href={text.href}>
-          {text.content}
-        </a>
-        </span>
-      ) : (
-        <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
-      )} */}
-      <span className={`overflow-hidden transition-all ${
-        expanded? "w-52 ml-3" : "w-0"
-      }`}>{text}</span>
-      {/* {alert && (
-        <div className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? "" : "top-2" }`} />
-      )} */}
+      <Link
+        to={href}
+        className={`overflow-hidden transition-all ${
+          expanded ? "w-52 ml-3" : "w-0"
+        }`}
+      >
+        {text}
+      </Link>
 
-      {!expanded && <div className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
-      >{text}</div>}
+      {!expanded && (
+        <div
+          className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+        >
+          {text}
+        </div>
+      )}
     </li>
   );
 }
 
 SideBarItem.propTypes = {
-    text: PropTypes.any,
-    active: PropTypes.any,
-    icon: PropTypes.any
-}
+  text: PropTypes.func,
+  active: PropTypes.any,
+  icon: PropTypes.any,
+  href: PropTypes.any,
+};
 
 Sidebar.propTypes = {
-    children: PropTypes.any,
-}
+  children: PropTypes.any,
+};

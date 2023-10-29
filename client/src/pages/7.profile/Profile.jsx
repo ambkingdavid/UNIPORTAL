@@ -2,27 +2,33 @@
 
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { signup, cancel } from '../../slices/signupSlice';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [password, setPassword] = useState("");
-  const [emailaddress, setEmailaddress] = useState("");
   const [country, setCountry] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postalcode, setPostalcode] = useState("");
 
+  const userData = useSelector((state) => state.user);
+  const profileEmail = userData.user.email;
+  const matric = userData.user.matric;
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const handleCancel = (e) => {
     e.preventDefault()
     dispatch(cancel());
+    navigate("/dashboard");
 };
 
 const handleSubmit = (e) => {
@@ -33,7 +39,6 @@ const handleSubmit = (e) => {
     firstname,
     lastname,
     password,
-    email: emailaddress,
     country,
     streetAddress,
     city,
@@ -86,6 +91,24 @@ const handleSubmit = (e) => {
 
           <div className="px-4 py-6 sm:p-8">
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+            <div className="sm:col-span-3">
+                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                  Matric Number
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="matric"
+                    value={matric}
+                    disabled
+                    id="first-name"
+                    autoComplete="given-name"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
               <div className="sm:col-span-3">
                 <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
                   First name
@@ -145,11 +168,11 @@ const handleSubmit = (e) => {
                   <input
                     id="email"
                     name="email"
-                    value={emailaddress}
-                  onChange={(e) => setEmailaddress(e.target.value)}
+                    disabled
+                    value={profileEmail}
                     type="email"
                     autoComplete="email"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -167,7 +190,7 @@ const handleSubmit = (e) => {
                     autoComplete="country-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
-                    <option>United States</option>
+                    <option>Nigeria</option>
                     <option>Canada</option>
                     <option>Mexico</option>
                   </select>

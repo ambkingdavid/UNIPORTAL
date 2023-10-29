@@ -3,11 +3,17 @@ import { useDispatch } from "react-redux";
 import uniportal from "../../assets/uniportal.jpg";
 import axios from "axios";
 import { signup } from "../../slices/signupSlice";
+import { Lock, Mail, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const url = "http://localhost:1245/signup";
 
 export default function Signup() {
   const [email, setEmailaddress] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [matric, setMatric] = useState("");
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -16,13 +22,19 @@ export default function Signup() {
 
     try {
       // MakeHTTP request using Axios
-      const response = await axios.post("http://localhost:1245/signup", {
-        username: email,
+      const response = await axios.post(url, {
+        matric: matric,
+        email: email,
         password: password,
       });
 
       // if the response contains user data, dispatch the login action
       dispatch(signup(response.data));
+
+      if (response.status === 200) {
+        // Signup was successful, so navigate to the login page
+        navigate("/Login");
+      }
     } catch (error) {
       //  show an error message
       console.error("Signup failed: ", error);
@@ -38,7 +50,7 @@ export default function Signup() {
             src={uniportal}
             alt="Your Company"
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-blue-600">
             Sign Up
           </h2>
         </div>
@@ -51,49 +63,43 @@ export default function Signup() {
             onSubmit={(e) => handleSubmit(e)}
           >
             <div>
-              <div className="mt-2">
+              <div className="mt-2 relative flex items-center text-gray-500">
+                <User className="w-5 h-5 ml-3 absolute" />
                 <input
-                  id="username"
-                  name="username"
-                  type="username"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="email"
+                  id="matric"
+                  name="matric"
+                  type="text"
+                  placeholder=" Matric Number"
+                  value={matric}
+                  onChange={(e) => setMatric(e.target.value)}
+                  autoComplete="matric"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 pl-10 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div>
-              <div className="mt-2">
+              <div className="mt-2 relative flex items-center text-gray-500">
+                <Mail className="w-5 h-5 ml-3 absolute" />
                 <input
                   id="email"
                   name="email"
                   type="email"
                   placeholder="Email"
                   value={email}
+                  required
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   onChange={(e) => setEmailaddress(e.target.value)}
                   autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 pl-10 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-2">
+              <div className="mt-2 relative flex items-center text-gray-500">
+                <Lock className="w-5 h-5 ml-3 absolute" />
                 <input
                   id="password"
                   name="password"
@@ -103,7 +109,7 @@ export default function Signup() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 pl-10 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -111,22 +117,12 @@ export default function Signup() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
               >
-                Sign in
+                Sign Up
               </button>
             </div>
           </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <a
-              href="/SignUp"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Sign up
-            </a>
-          </p>
         </div>
       </div>
     </>
