@@ -62,6 +62,15 @@ class StudentController {
     }
     return res.status(200).send(student);
   }
+
+  static async getStudentCourses(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+    const studentId = req.user.id;
+    const courses = Student.getcourses(studentId);
+    return res.status(200).send(courses);
+  }
 }
 
 module.exports = StudentController;

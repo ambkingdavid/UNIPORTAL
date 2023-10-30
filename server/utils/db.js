@@ -90,6 +90,18 @@ const Course = dbClient.define('Course', {
   unit: DataTypes.INTEGER,
 });
 
+// course registration
+const CourseRegistration = dbClient.define('CourseRegistration', {
+  id: {
+    type: DataTypes.STRING,
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+  },
+  level: DataTypes.INTEGER,
+  semester: DataTypes.INTEGER,
+});
+
+
 // Score Model
 const Result = dbClient.define('Result', {
   id: {
@@ -117,8 +129,15 @@ const Library = dbClient.define('Library', {
 Student.hasOne(Profile, { foreignKey: 'studentId' });
 Profile.belongsTo(Student, { foreignKey: 'studentId' });
 
-Course.belongsTo(Student);
-Student.hasMany(Course, { as: 'courses' });
+Student.belongsToMany(Course, {
+  through: CourseRegistration,
+  foreignKey: 'studentId',
+});
+
+Course.belongsToMany(Student, {
+  through: CourseRegistration,
+  foreignKey: 'courseId',
+});
 
 Student.hasMany(Result, { as: 'results' });
 Result.belongsTo(Student);
