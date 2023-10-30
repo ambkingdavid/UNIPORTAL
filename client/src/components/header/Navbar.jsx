@@ -4,13 +4,10 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import uniportal from "../../assets/uniportal.jpg";
 import { LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const navigation = [
   { name: "Home", href: "/", current: true },
-  // { name: "Login", href: "/Login", current: false },
-  // { name: "Student", href: "/Student", current: false },
-  // { name: "Parent", href: "/Parent", current: false },
-  // { name: "Staff", href: "/Staff", current: false },
   { name: "About", href: "/About", current: false },
   { name: "Contact Us", href: "/Contact", current: false },
 ];
@@ -19,7 +16,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/SignUp");
+  };
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -54,77 +57,78 @@ export default function Example() {
                   </div>
                 </div>
               </div>
-              {
-                location.pathname === "/" ? (
-                  <div className="flex h-9 justify-around gap-2">
-                    <Menu as="div" className="relative ml-4 flex-shrink-0">
-                      <div>
-                        <Menu.Button className="relative flex rounded-md bg-blue-400 text-sm text-white">
+              {location.pathname === "/" ? (
+                <div className="flex h-9 justify-around gap-2">
+                  <Menu as="div" className="relative ml-4 flex-shrink-0">
+                    <div>
+                      <Menu.Button className="relative flex rounded-md bg-blue-400 text-sm text-white">
                         <span className="absolute -inset-1.5" />
-                          <div className="flex justify-between items-center bg-transparent border rounded-md gap-2 px-2 py-1.5">
-                      <LogIn/>
-                      Login
+                        <div className="flex justify-between items-center bg-transparent border rounded-md gap-2 px-2 py-1.5">
+                          <LogIn />
+                          Login
+                        </div>
+                      </Menu.Button>
                     </div>
-                        </Menu.Button>
-                      </div>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="/Login"
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                Student
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="/Parent"
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                Parent
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="/Staff"
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                Staff
-                              </a>
-                            )}
-                          </Menu.Item>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
-                    <button className="px-3 py-1 border rounded-md">
-                      Sign Up
-                    </button>
-                  </div>
-                ) : null
-              }
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="/Login"
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Student
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="/Parent"
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Parent
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="/Staff"
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Staff
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                  <button
+                    className="px-3 py-1 border rounded-md"
+                    onClick={handleNavigate}
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              ) : null}
               {location.pathname !== "/Login" && location.pathname !== "/" ? (
                 <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
                   <div className="w-full max-w-lg lg:max-w-xs">

@@ -31,7 +31,7 @@ const Dashboard = () => {
         />
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
-      <CoursesTable />
+      {/* <CoursesTable /> */}
     </div>
   );
 };
