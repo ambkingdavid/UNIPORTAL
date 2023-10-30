@@ -2,6 +2,7 @@
 const bcrypt = require('bcrypt');
 const dbClient = require('../utils/db').Student;
 const Profile = require('./profile.model');
+const Course = require('./course.model');
 const { hashPassword } = require('../utils/helpers');
 const { customLogger } = require('../utils/helpers');
 
@@ -177,6 +178,28 @@ class Student {
     await user.save();
 
     return user.id;
+  }
+
+  //register courses to a student
+  static async registerCourses(studentId, courseIds) {
+    const student = await dbClient.findByPk(studentId);
+    const courses = await Course.getAll(courseIds);
+    if (student && courses.length > 0) {
+      await student.addCourses(courses);
+    }
+
+    const studentCourses = student.getCourses();
+    return studentCourses;
+  }
+
+  //gets the courses registered to a student
+  static async getcourses(studentId) {
+    const student = await dbClient.findByPk(studentId);
+    if (!student) {
+      throw new Error('Student not null');
+    }
+    const courses = await student.getCourses();
+    return courses;
   }
 }
 
