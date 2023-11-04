@@ -36,7 +36,7 @@ export default function Login() {
       if (response.status === 200) {
         dispatch(setUser(response.data));
         // Login was successful, so navigate to the dashboard page
-        navigate("/Dashboard");
+        navigate("/lecturerDash");
       }
     } catch (error) {
       //  show an error message
@@ -69,10 +69,10 @@ export default function Login() {
               <div className="mt-2 relative flex items-center text-gray-500">
                 <Hash className="w-5 h-5 ml-3 absolute"/>
                 <input
-                  id="matric"
-                  name="matric"
+                  id="staff_id"
+                  name="staff_id"
                   type="text"
-                  placeholder="Matric Number"
+                  placeholder="Staff ID"
                   value={matric}
                   onChange={(e) => setMatric(e.target.value)}
                   autoComplete="matric"
