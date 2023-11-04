@@ -20,7 +20,7 @@ const Logout = () => {
 
       if (response.status === 200) {
         // Logout was successful, so navigate to the login page
-        navigate("/Login");
+        navigate("/");
       }
     } catch (error) {
       console.log("logout error:", error);

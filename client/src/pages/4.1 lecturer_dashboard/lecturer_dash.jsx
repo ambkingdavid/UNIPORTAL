@@ -1,5 +1,4 @@
 import Sidebar, { SideBarItem } from "../../components/body/Side";
-import CoursesTable from "../../components/body/courses_table";
 import {
   HelpCircle,
   Sheet,
@@ -7,24 +6,19 @@ import {
   LayoutDashboard,
   Settings,
   Library,
-  Home,
 } from "lucide-react";
-import { columns, data } from "../../components/body/courses_table";
+import LecturerResult from "../../components/body/lecturer_result";
 
-const Dashboard = () => {
+const LecturerDash = () => {
   return (
     <div className="flex flex-row text-center">
       <Sidebar>
         <SideBarItem
           icon={<LayoutDashboard size={20} />}
-          text="Dashboard"
-          href="/Dashboard"
+          text="LecturerDash"
+          href="/lecturerDash"
         />
-        <SideBarItem
-          icon={<BarChart3 size={20} />}
-          text="Results"
-          href="/result"
-        />
+        <SideBarItem icon={<BarChart3 size={20} />} text="Results" />
         <SideBarItem icon={<Library size={20} />} text="Resources" />
         <SideBarItem icon={<Sheet size={20} />} text="Transcript" />
         <hr className="my-3" />
@@ -33,12 +27,11 @@ const Dashboard = () => {
           text="Profile"
           href="/Profile"
         />
-        <SideBarItem icon={<Home size={20} />} text="Home" href="/" />
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
-      <CoursesTable col={columns} input={data} />
+      <LecturerResult />
     </div>
   );
 };
 
-export default Dashboard;
+export default LecturerDash;

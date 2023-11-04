@@ -14,6 +14,8 @@ import Dashboard from './pages/4.dashboard/Dashboard'
 import SignUp from './pages/9.signup/Signup'
 import Staff_Login from './pages/2.2 staff_login/Staff_Login'
 import Parent_Login from './pages/2.1 parent_login/Parent_Login'
+import LecturerDash from './pages/4.1 lecturer_dashboard/lecturer_dash'
+import ResultDash from './pages/4.2 result_dash/result_dash'
 
 function App() {
   const user = useSelector(selectUser);
@@ -31,7 +33,9 @@ function App() {
           <Route path='/Login' element={user ? <Events/> : <Login/>} />
           <Route path='/SignUp' element={<SignUp/>} />
           <Route path='/Profile' element={<Profile/>} />
+          <Route path='/result' element={<ResultDash/>} />
           <Route path='/Dashboard' element={<Dashboard/>} />
+          <Route path='/lecturerDash' element={<LecturerDash/>} />
         </Routes>
         {location.pathname !== "/Dashboard" ? <Foot /> : null}
         </Router>
