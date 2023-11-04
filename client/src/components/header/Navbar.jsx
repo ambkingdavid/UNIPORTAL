@@ -1,10 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import uniportal from "../../assets/uniportal.jpg";
 import { LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const navigation = [
   { name: "Home", href: "/", current: true },
@@ -12,12 +13,31 @@ export const navigation = [
   { name: "Contact Us", href: "/Contact", current: false },
 ];
 
+export const useStatus = () => {
+  const [responseData, setResponseData] = useState(null);
+
+  useEffect(() => {
+    axios.get("https://localhost:1245/student/me")
+      .then((response) => {
+        // Set the response data in the state variable
+        console.log(response);
+        setResponseData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  return responseData;
+};
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const status = useStatus();
 
   const handleNavigate = () => {
     navigate("/SignUp");
@@ -57,10 +77,11 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-              {location.pathname === "/" ? (
+              {location.pathname === "/"? (
                 <div className="flex h-9 justify-around gap-2">
                   <Menu as="div" className="relative ml-4 flex-shrink-0">
-                    <div>
+                    {status !== 200 ? (
+                      <div>
                       <Menu.Button className="relative flex rounded-md bg-blue-400 text-sm text-white">
                         <span className="absolute -inset-1.5" />
                         <div className="flex justify-between items-center bg-transparent border rounded-md gap-2 px-2 py-1.5">
@@ -69,6 +90,7 @@ export default function Navbar() {
                         </div>
                       </Menu.Button>
                     </div>
+                    ) : null}
                     <Transition
                       as={Fragment}
                       enter="transition ease-out duration-100"

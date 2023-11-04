@@ -55,15 +55,15 @@ export const data = [
   },
 ];
 
- const [setLevel, setLevelValue] = useState([data]);
+//  const [setLevel, setLevelValue] = useState([data]);
 
-const handleChange = (e) => {
-    e.preventDefault();
-  const {
-    target: { value },
-  } = e;
-  setLevelValue(value);
-};
+// const handleChange = (e) => {
+//     e.preventDefault();
+//   const {
+//     target: { value },
+//   } = e;
+//   setLevelValue(value);
+// };
 
 const ResultsTable = () => {
   return (
