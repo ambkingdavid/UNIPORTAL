@@ -11,7 +11,7 @@ class StudentController {
     }
   }
 
-  static async updateProfile(req, res) {
+  static async updateStudentProfile(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
@@ -70,6 +70,17 @@ class StudentController {
     const studentId = req.user.id;
     const courses = Student.getcourses(studentId);
     return res.status(200).send(courses);
+  }
+
+  static async updatePassword(req, res) {
+    const { matric, email } = req.body;
+    const user = Student.changePassword(matric, email);
+
+    if (!user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(201).send('paswword changed')
   }
 }
 
