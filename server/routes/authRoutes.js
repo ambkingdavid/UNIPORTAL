@@ -10,14 +10,6 @@ router.post('/:portal/login', passport.authenticate('local'),
 
 router.post('/:portal/logout', async (req, res, next) => {
   if (req.user && req.user.id) {
-    const userId = req.user.id;
-    const { portal } = req.params;
-
-    if (portal === 'student' || portal === 'parent') {
-      await Student.updateLoginStatus(userId, { isLoggedIn: false });
-    } else {
-      await Staff.updateLoginStatus(userId, { isLoggedIn: false });
-    }
 
     req.logout((err) => {
       if (err) {

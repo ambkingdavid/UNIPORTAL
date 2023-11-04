@@ -6,8 +6,8 @@ const Staff = require('../models/staff.model');
 passport.use('local', new LocalStrategy({
   passReqToCallback: true,
 }, async (req, username, password, cb) => {
+  const { portal } = req.params;
   try {
-    const { portal } = req.params;
     let data;
 
     if (portal === 'student' || portal === 'parent') {
@@ -21,17 +21,6 @@ passport.use('local', new LocalStrategy({
         return cb(null, false, { message: 'Incorrect password' });
       }
     }
-
-    if (data && data.user.isLoggedIn === true) {
-      return cb(null, false, { message: 'User is already logged in.' });
-    }
-
-    if (portal === 'student' || portal === 'parent') {
-      await Student.updateLoginStatus(data.user.id, { isLoggedIn: true });
-    } else {
-      await Staff.updateLoginStatus(data.user.id, { isLoggedIn: true });
-    }
-
     return cb(null, data);
   } catch (err) {
     return cb(null, false, { message: 'No user with this matric' });

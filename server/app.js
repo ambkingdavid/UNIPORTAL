@@ -42,7 +42,6 @@ app.use(passport.authenticate('session'));
 app.use('/', indexRouter);
 app.use('/', authRouter);
 
-// catch 404 and forward to error handler
 app.use((req, res) => {
   res.status(404).send({ error: 'Not found' });
 });

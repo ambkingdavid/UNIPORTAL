@@ -23,10 +23,6 @@ const Student = dbClient.define('Student', {
   },
   courseOfStudy: DataTypes.STRING,
   admissionType: DataTypes.STRING,
-  isLoggedIn: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 const Staff = dbClient.define('Staff', {
