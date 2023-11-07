@@ -14,7 +14,7 @@ const CourseRegistration = () => {
     if (selectedCourses.length < 10 && !selectedCourses.includes(course)) {
       setSelectedCourses([...selectedCourses, course]);
     }
-    setSelectedCourse("");
+    setSelectedCourse(course);
   };
 
   const handleSemesterSelection = (e) => {
@@ -25,7 +25,7 @@ const CourseRegistration = () => {
     ) {
       setSelectedSemesters([...selectedSemesters, semester]);
     }
-    setSelectedSemester("");
+    setSelectedSemester(semester);
   };
 
   const handleLevelSelection = (e) => {
@@ -33,7 +33,7 @@ const CourseRegistration = () => {
     if (selectedLevels.length < 10 && !selectedLevels.includes(level)) {
       setSelectedLevels([...selectedLevels, level]);
     }
-    setSelectedLevel("");
+    setSelectedLevel(level);
   };
 
   const combinedData = selectedCourses.map((course, index) => ({
@@ -44,25 +44,23 @@ const CourseRegistration = () => {
 
   const removeSelectedCourse = (index) => {
     const updatedData = [...combinedData];
-    updatedData.splice(index, 1); // Remove the item at the specified index
-    // Update the state or data source with the updated array
-    // Example: setCombinedData(updatedData);
-  };
-  
+    updatedData.splice(index, 1);
+    setSelectedCourses(selectedCourses.filter((_, i) => i !== index));
+    setSelectedSemesters(selectedSemesters.filter((_, i) => i !== index));
+    setSelectedLevels(selectedLevels.filter((_, i) => i !== index));
 
-  // const removeSelectedCourse = (course) => {
-  //   const updatedCourses = selectedCourses.filter((c) => c !== course);
-  //   setSelectedCourses(updatedCourses);
-  // };
+    setSelectedCourse("");
+    setSelectedSemester("");
+    setSelectedLevel("");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate a successful registration (replace with server logic)
     setRegistrationSuccess(true);
   };
 
   return (
-    <div className="flex flex-col items-center  mx-auto gap-5">
+    <div className="flex flex-col items-center mx-auto gap-5">
       <h2 className="text-2xl font-semibold py-4">Course Registration</h2>
       {registrationSuccess ? (
         <p>Registration successful.</p>
@@ -74,10 +72,10 @@ const CourseRegistration = () => {
             <select
               className="rounded-lg border-none bg-gray-200 w-[200px]"
               id="courseSelect"
-              value={selectedCourse}
+              value={selectedCourse || ""}
               onChange={handleCourseSelection}
             >
-              <option value="" disabled>
+              <option value="" selected>
                 None
               </option>
               <option value="Course A">Course A</option>
@@ -90,10 +88,10 @@ const CourseRegistration = () => {
             <select
               className="rounded-lg border-none bg-gray-200 w-[200px]"
               id="semesterSelect"
-              value={selectedSemester}
+              value={selectedSemester || ""}
               onChange={handleSemesterSelection}
             >
-              <option value="" disabled>
+              <option value="" selected>
                 None
               </option>
               <option value="1st Semester">1st Semester</option>
@@ -104,10 +102,10 @@ const CourseRegistration = () => {
             <select
               className="rounded-lg border-none bg-gray-200 w-[200px]"
               id="levelSelect"
-              value={selectedLevel}
+              value={selectedLevel || ""}
               onChange={handleLevelSelection}
             >
-              <option value="" disabled>
+              <option value="" selected>
                 None
               </option>
               <option value="100 level">100 level</option>
@@ -123,10 +121,10 @@ const CourseRegistration = () => {
             <ul>
               {combinedData.map((data, index) => (
                 <li key={index}>
-                  <span className="font-bold pl-2">Course:</span> {data.course}, 
-                  <span className="font-bold pl-2">Semester:</span> {data.semester}, 
-                  <span className="font-bold pl-2">Level:</span>{" "}
-                  {data.level}
+                  <span className="font-bold pl-2">Course:</span> {data.course},{" "}
+                  <span className="font-bold pl-2">Semester:</span>{" "}
+                  {data.semester},{" "}
+                  <span className="font-bold pl-2">Level:</span> {data.level}
                   <button
                     type="button"
                     className="border-2 rounded-lg bg-blue-500 w-[100px] ml-3"

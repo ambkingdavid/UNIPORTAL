@@ -9,7 +9,7 @@ import {
   Library,
   Home,
 } from "lucide-react";
-import { columns, data } from "../../components/body/courses_table";
+import { columns, data } from "../../components/body/table_data";
 
 const Dashboard = () => {
   return (
@@ -36,7 +36,7 @@ const Dashboard = () => {
         <SideBarItem icon={<Home size={20} />} text="Home" href="/" />
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
-      <CoursesTable col={columns} input={data} />
+      <CoursesTable column={columns} input={data} />
     </div>
   );
 };

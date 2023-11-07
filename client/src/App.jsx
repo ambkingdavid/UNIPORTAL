@@ -17,6 +17,7 @@ import Parent_Login from './pages/2.1 parent_login/Parent_Login'
 import LecturerDash from './pages/4.1 lecturer_dashboard/lecturer_dash'
 import ResultDash from './pages/4.2 result_dash/result_dash'
 
+
 function App() {
   const user = useSelector(selectUser);
 
