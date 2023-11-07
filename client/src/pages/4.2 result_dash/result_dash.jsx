@@ -9,6 +9,7 @@ import {
   Home,
 } from "lucide-react";
 import ResultsTable from "../../components/body/results";
+import { columns, data } from "../../components/body/result_data";
 
 const ResultDash = () => {
   return (
@@ -31,7 +32,7 @@ const ResultDash = () => {
         <SideBarItem icon={<Home size={20} />} text="Home" href="/" />
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
-      <ResultsTable />
+      <ResultsTable columns={columns} data={data}/>
     </div>
   );
 };

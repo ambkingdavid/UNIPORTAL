@@ -1,20 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const [responseData, setResponseData] = useState(null);
+export const useStatus = () => {
+  const [responseData, setResponseData] = useState(null);
+  const url = "http://localhost:1245/student/me";
 
+  useEffect(() => {
+    axios
+      .get(url, { withCredentials: true })
+      .then((response) => {
+        console.log(response);
+        setResponseData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
-useEffect(() => {
-  axios.get('https://localhost:1245/status')
-    .then((response) => {
-      // Set the response data in the state variable
-      setResponseData(response.data);
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error);
-    });
-}, []);
-
-export const Status = () => {
   return responseData;
 };
