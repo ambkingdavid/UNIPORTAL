@@ -19,7 +19,7 @@ class ProgramOFStudy {
   }
 
   static async getProgramByIdorName(query) {
-    const program = await Program.findone({
+    const program = await Program.findOne({
       where: {
         [Op.or]: [
           { name: query },

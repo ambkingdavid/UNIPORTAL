@@ -179,7 +179,7 @@ class Student {
  * @param {string[]} courseList - An array of course identifiers to be registered.
  * @param {string} level
  * @param {string} semester
- * @returns {null} Returns null upon successful course registration.
+ * @returns {null} Returns null.
  * @throws {Error} If the student is not found, or if there are no courses to register.
  */
 
@@ -197,7 +197,6 @@ class Student {
             semester,
           }
         });
-        console.log('Course registered');
       }
     }
   }
