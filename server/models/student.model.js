@@ -140,48 +140,50 @@ class Student {
   }
 
   /**
- * Changes the password for a user.
- *
- * @param {string} userId - The identifier of the user.
- * @param {object} data - An object containing the user's data, including the new password and email.
- * @returns {string} Returns the user's identifier after the password is successfully changed.
- * @throws {Error} If the user is not found, or if the provided email doesn't match the user's email.
- */
+   * Changes the password for a user.
+   *
+   * @param {string} userId - The identifier of the user.
+   * @param {object} data - An object containing the user's data, including the new password and email.
+   * @returns {string} Returns the user's identifier after the password is successfully changed.
+   * @throws {Error} If the user is not found, or if the provided email doesn't match the user's email.
+   */
 
   static async changePassword(userId, data) {
-    const user = await dbClient.findByPk(userId);
+    try {
+      const user = await dbClient.findByPk(userId);
 
-    if (!user) {
-      throw new Error('User not found');
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      if (data.email !== user.email) {
+        throw new Error('Incorrect email');
+      }
+
+      const newPassword = await hashPassword(data.password);
+
+      // Update the user's password in the database
+      await user.update({ password: newPassword });
+
+      return user.id;
+    } catch (error) {
+      throw error;
     }
-
-    if (data.email !== user.email) {
-      throw new Error('Incorrect email');
-    }
-
-    const newPassword = await hashPassword(data.password);
-
-    const updatedPassword = {
-      password: newPassword,
-    };
-
-    Object.assign(user, updatedPassword);
-
-    await user.save();
-
-    return user.id;
   }
+
 
   /**
  * Registers courses for a student based on the provided course list.
  *
  * @param {string} studentId - The identifier of the student.
  * @param {string[]} courseList - An array of course identifiers to be registered.
+ * @param {string} level
+ * @param {string} semester
  * @returns {null} Returns null upon successful course registration.
  * @throws {Error} If the student is not found, or if there are no courses to register.
  */
 
-  static async registerCourses(studentId, courseList) {
+  static async registerCourses(studentId, courseList, level, semester) {
     const student = await dbClient.findByPk(studentId);
     if (!student) {
       throw new Error('Student not found');
@@ -191,8 +193,8 @@ class Student {
       for (const course of courses) {
         await student.addCourses(course, {
           through: {
-            level: student.level,
-            semester: student.semester,
+            level,
+            semester,
           }
         });
         console.log('Course registered');
