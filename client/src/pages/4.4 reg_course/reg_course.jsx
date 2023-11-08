@@ -1,5 +1,4 @@
 import Sidebar, { SideBarItem } from "../../components/body/Side";
-import CoursesTable from "../../components/body/courses_table";
 import {
   HelpCircle,
   Sheet,
@@ -7,15 +6,15 @@ import {
   LayoutDashboard,
   Settings,
   Library,
-  BookOpenCheck,
   BookOpen,
+  BookOpenCheck,
 } from "lucide-react";
-import { columns, data } from "../../components/body/table_data";
+import { columns, data } from "../../components/body/result_data";
 
-const Dashboard = () => {
+const RegCourse = () => {
   return (
     <div className="flex flex-row text-center">
-      <Sidebar>
+     <Sidebar>
         <SideBarItem
           icon={<LayoutDashboard size={20} />}
           text="Dashboard"
@@ -24,7 +23,7 @@ const Dashboard = () => {
         <SideBarItem
           icon={<BookOpen size={20} />}
           text="Courses Registration"
-          href="/regCourses"
+          href="/courseReg"
         />
         <SideBarItem
           icon={<BookOpenCheck size={20} />}
@@ -48,9 +47,8 @@ const Dashboard = () => {
 
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
-      <CoursesTable column={columns} input={data} />
     </div>
   );
 };
 
-export default Dashboard;
+export default RegCourse;

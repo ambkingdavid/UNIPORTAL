@@ -136,7 +136,7 @@ router.get('/staffs', StaffController.getAllStaffs);
 router.get('/students', StudentController.getAllStudents);
 router.get('/student/:id', StudentController.getStudent);
 router.get('/student/courses', StudentController.getStudentCourses);
-router.get('/program/:id', ProgramController.getStudentProgram)
+router.get('/program', ProgramController.getStudentProgram)
 
 // put requests - UPDATE
 router.put('/student/registerCourse', StudentController.registerCourses);
