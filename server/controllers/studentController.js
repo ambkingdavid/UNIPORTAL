@@ -17,8 +17,9 @@ class StudentController {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
-    const student = await Profile.update(req.user.id, req.body);
-    return res.status(200).send({ id: student });
+    const profile = await Profile.get(req.params.id);
+    const student = await profile.update(req.user.id, req.body);
+    return res.status(201).send('Profile Updated');
   }
 
   // checks if a user has a active session
@@ -88,6 +89,10 @@ class StudentController {
     }
 
     return res.status(200).send(courses);
+  }
+
+  static async getProgramInfo(req, res) {
+
   }
 
   static async registerCourses(req, res) {

@@ -20,10 +20,11 @@ router.get('/staffs', StaffController.getAllStaffs);
 router.get('/students', StudentController.getAllStudents);
 router.get('/student/:id', StudentController.getStudent);
 router.get('/student/courses', StudentController.getStudentCourses);
+router.get('/program/:id', StudentController.getProgramInfo)
 
 // put requests - UPDATE
 router.put('/student/registerCourse', StudentController.registerCourses);
-router.put('/student/profile', StudentController.updateStudentProfile);
+router.put('/student/profile/:id', StudentController.updateStudentProfile);
 router.put('/student/updatePassword', StudentController.updatePassword);
 router.put('/staff/updatePassword', StaffController.updatePassword);
 
