@@ -24,7 +24,7 @@ const CourseReg = () => {
         <SideBarItem
           icon={<BookOpen size={20} />}
           text="Courses Registration"
-          href="/C"
+          href="/courseReg"
         />
         <SideBarItem
           icon={<BookOpenCheck size={20} />}

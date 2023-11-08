@@ -14,7 +14,7 @@ import { columns, data } from "../../components/body/result_data";
 const RegCourse = () => {
   return (
     <div className="flex flex-row text-center">
-      <Sidebar>
+     <Sidebar>
         <SideBarItem
           icon={<LayoutDashboard size={20} />}
           text="Dashboard"
@@ -23,7 +23,7 @@ const RegCourse = () => {
         <SideBarItem
           icon={<BookOpen size={20} />}
           text="Courses Registration"
-          href="/C"
+          href="/courseReg"
         />
         <SideBarItem
           icon={<BookOpenCheck size={20} />}
