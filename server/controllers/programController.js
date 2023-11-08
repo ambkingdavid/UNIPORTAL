@@ -1,11 +1,12 @@
 const Program = require('../models/program.model');
 
 class ProgramController {
-  static async getProgramInfo(req, res) {
+  static async getStudentProgram(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
-    const program = await Program.getProgramByIdorName(req.params.id);
+    const { courseName, category } = req.query;
+    const program = await Program.getProgramByNameAndCategory(courseName, category);
 
     req.status(200).send(program);
   }
