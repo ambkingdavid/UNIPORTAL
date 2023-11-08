@@ -1,6 +1,6 @@
 const Program = require('../models/program.model');
 
-class programController {
+class ProgramController {
   static async getProgramInfo(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
@@ -17,4 +17,4 @@ class programController {
   }
 }
 
-module.exports = programController;
+module.exports = ProgramController;
