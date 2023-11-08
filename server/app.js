@@ -6,6 +6,8 @@ const session = require('express-session');
 const passport = require('passport');
 const SQLiteStore = require('connect-sqlite3')(session);
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 const indexRouter = require('./routes/indexRoutes');
 const authRouter = require('./routes/authRoutes');
@@ -36,6 +38,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.authenticate('session'));
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'My API',
+      version: '1.0.0',
+      description: 'My API documentation',
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
