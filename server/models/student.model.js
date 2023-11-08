@@ -3,39 +3,45 @@ const bcrypt = require('bcrypt');
 const dbClient = require('../utils/db').Student;
 const Profile = require('./profile.model');
 const Course = require('./course.model');
+const Program = require('./program.model');
 const { hashPassword } = require('../utils/helpers');
 const { customLogger } = require('../utils/helpers');
 
 class Student {
   /**
-  * Creates a user in the database.
-  *
-  * @param {Object} data - The data for creating the user.
-  * @returns {Promise<User>} A Promise that resolves to the created user profile.
-  * @throws {Error} If there is an error while creating the profile.
-  */
-  static async add(data) {
-    const kwargs = { ...data };
-    if (kwargs.password) {
-      kwargs.password = await hashPassword(kwargs.password);
+   * Creates a new student profile and associates them with a program of study.
+   *
+   * @param {Object} data - The data for creating the student profile.
+   * @returns {Object} An object containing the created student profile and associated user profile.
+   * @throws {Error} If there is an error during creation, including uniqueness constraints.
+   */
+  static async create(data) {
+    const dataCopy = { ...data };
+
+    if (dataCopy.password) {
+      dataCopy.password = await hashPassword(dataCopy.password);
     }
-    let newUser;
+
     try {
-      newUser = dbClient.build(kwargs);
-      await newUser.validate();
-      await newUser.save();
+      const newStudent = await dbClient.create(dataCopy);
+      const program = await Program.getProgramByNameAndCategory(dataCopy.courseOfStudy, dataCopy.degree);
+
+      await program.addStudent(newStudent);
+      const profile = await Profile.createProfile(newStudent.id, {});
+
+      return {
+        user: newStudent,
+        profile,
+      };
     } catch (err) {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        const message = '[Error] Table column data already exist';
+        const message = '[Error] Table column data already exists';
         customLogger(message);
+        throw err;
+      } else {
         throw err;
       }
     }
-    const profile = await Profile.createProfile(newUser.id, {});
-    return {
-      user: newUser,
-      profile,
-    };
   }
 
   /**
@@ -47,14 +53,12 @@ class Student {
   * @returns {Promise<Student[]>} A Promise that resolves to an array of student object(s).
   * @throws {Error} If there is an error while fetching students.
   */
-  static async findAll(query = {}) {
+  static async findAll(query) {
     const students = await dbClient.findAll(query);
 
     const studentsData = students.map((user) => {
       const {
         password,
-        createdAt,
-        updatedAt,
         ...studentData
       } = user.dataValues;
       return studentData;
@@ -80,8 +84,6 @@ class Student {
 
     const {
       password,
-      createdAt: userCreatedAt,
-      updatedAt: userUpdatedAt,
       ...userData
     } = user.dataValues;
 
@@ -106,41 +108,22 @@ class Student {
 
     const {
       password,
-      createdAt: studentCreatedAt,
-      updatedAt: studentUpdatedAt,
       ...studentData
     } = student.dataValues;
-
-    const {
-      createdAt: profileCreatedAt,
-      updatedAt: profileUpdatedAt,
-      ...StudentProfile
-    } = profile.dataValues;
 
     return {
       user: studentData,
-      profile: StudentProfile,
+      profile,
     };
   }
 
-  static async updateLoginStatus(studentId, query) {
-    const student = await dbClient.findByPk(studentId);
-
-    if (!student) {
-      throw new Error('User not found');
-    }
-
-    Object.assign(student, query);
-
-    await student.save();
-    const {
-      password,
-      createdAt: studentCreatedAt,
-      updatedAt: studentUpdatedAt,
-      ...studentData
-    } = student.dataValues;
-    return studentData;
-  }
+  /**
+ * Validates a student's password during login.
+ *
+ * @param {string} studentId - The identifier of the student.
+ * @param {string} password - The password to be validated.
+ * @returns {boolean} Returns true if the password is valid, or false if it's not.
+ */
 
   static async validatePassword(studentId, password) {
     const student = await dbClient.findByPk(studentId);
@@ -155,6 +138,15 @@ class Student {
 
     return true;
   }
+
+  /**
+ * Changes the password for a user.
+ *
+ * @param {string} userId - The identifier of the user.
+ * @param {object} data - An object containing the user's data, including the new password and email.
+ * @returns {string} Returns the user's identifier after the password is successfully changed.
+ * @throws {Error} If the user is not found, or if the provided email doesn't match the user's email.
+ */
 
   static async changePassword(userId, data) {
     const user = await dbClient.findByPk(userId);
@@ -180,19 +172,42 @@ class Student {
     return user.id;
   }
 
-  //register courses to a student
-  static async registerCourses(studentId, courseIds) {
-    const student = await dbClient.findByPk(studentId);
-    const courses = await Course.getAll(courseIds);
-    if (student && courses.length > 0) {
-      await student.addCourses(courses);
-    }
+  /**
+ * Registers courses for a student based on the provided course list.
+ *
+ * @param {string} studentId - The identifier of the student.
+ * @param {string[]} courseList - An array of course identifiers to be registered.
+ * @returns {null} Returns null upon successful course registration.
+ * @throws {Error} If the student is not found, or if there are no courses to register.
+ */
 
-    const studentCourses = student.getCourses();
-    return studentCourses;
+  static async registerCourses(studentId, courseList) {
+    const student = await dbClient.findByPk(studentId);
+    if (!student) {
+      throw new Error('Student not found');
+    }
+    const courses = await Course.getAll(courseList);
+    if (student && courses.length > 0) {
+      for (const course of courses) {
+        await student.addCourses(course, {
+          through: {
+            level: student.level,
+            semester: student.semester,
+          }
+        });
+        console.log('Course registered');
+      }
+    }
   }
 
-  //gets the courses registered to a student
+  /**
+   * Retrieves the courses registered by a student.
+   *
+   * @param {string} studentId - The identifier of the student.
+   * @returns {Course[]} An array of Course objects registered by the student.
+   * @throws {Error} If the student is not found.
+   */
+
   static async getcourses(studentId) {
     const student = await dbClient.findByPk(studentId);
     if (!student) {

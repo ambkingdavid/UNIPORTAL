@@ -2,16 +2,18 @@ const Student = require('../models/student.model');
 const Profile = require('../models/profile.model');
 
 class StudentController {
+  //
   static async addUser(req, res) {
     try {
-      const newUser = await Student.add(req.body);
+      const newUser = await Student.create(req.body);
       return res.status(200).send(newUser.user.id);
     } catch (err) {
       return res.status(401).send('Email or Username already in use');
     }
   }
 
-  static async updateProfile(req, res) {
+  // update a student profile
+  static async updateStudentProfile(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
@@ -19,17 +21,18 @@ class StudentController {
     return res.status(200).send({ id: student });
   }
 
+  // checks if a user has a active session
   static async getMe(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
     const studentId = req.user.id;
 
-    const student = Student.findOne({
+    const student = Student.find({
       id: studentId,
     });
 
-    if (!student || !student.isLoggedIn) {
+    if (!student) {
       return res.status(401).send('Error: Unauthorized');
     }
 
@@ -68,8 +71,57 @@ class StudentController {
       return res.status(401).send('Error: Unauthorized');
     }
     const studentId = req.user.id;
-    const courses = Student.getcourses(studentId);
+    const courseList = Student.getcourses(studentId);
+    const courses = {};
+    for (const course of courseList) {
+      const { level, semester } = course.dataValues.CourseRegistration;
+
+      if (!courses[level]) {
+        courses[level] = {};
+      }
+
+      if (!courses[level][semester]) {
+        courses[level][semester] = [];
+      }
+
+      courses[level][semester].push(course.courseName);
+    }
+
     return res.status(200).send(courses);
+  }
+
+  static async registerCourses(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    const student = await Student.find({
+      id: req.user.id,
+    });
+
+    if (!student) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    const { courses } = req.body;
+    try {
+      await Student.registerCourses(req.user.id, courses);
+    } catch (err) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(201).send('Courses added');
+  }
+
+  static async updatePassword(req, res) {
+    const { matric, email } = req.body;
+    const user = Student.changePassword(matric, email);
+
+    if (!user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(201).send('paswword changed')
   }
 }
 

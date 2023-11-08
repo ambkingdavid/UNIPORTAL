@@ -53,6 +53,17 @@ class StaffController {
     }
     return res.status(200).send(staff);
   }
+
+  static async updatePassword(req, res) {
+    const { matric, email } = req.body;
+    const user = Staff.changePassword(matric, email);
+
+    if (!user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(201).send('paswword changed')
+  }
 }
 
 module.exports = StaffController;
