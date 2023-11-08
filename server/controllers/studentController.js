@@ -18,7 +18,7 @@ class StudentController {
       return res.status(401).send('Error: Unauthorized');
     }
     const student = await Profile.update(req.user.id, req.body);
-    return res.status(201).send('Profile Updated');
+    return res.status(201).send(student);
   }
 
   // checks if a user has a active session
