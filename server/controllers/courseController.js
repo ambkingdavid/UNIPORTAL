@@ -13,3 +13,5 @@ class CourseController {
     const courses = Course.getCourses()
   }
 }
+
+module.exports = CourseController;

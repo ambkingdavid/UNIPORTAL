@@ -21,8 +21,24 @@ const Student = dbClient.define('Student', {
     type: DataTypes.STRING,
     unique: true,
   },
-  courseOfStudy: DataTypes.STRING,
-  admissionType: DataTypes.STRING,
+  level: {
+    type: DataTypes.INTEGER,
+    defaultValue: 100,
+    allowNull: false,
+  },
+  semester: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+    allowNull: false,
+  },
+  courseOfStudy: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  degree: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 const Staff = dbClient.define('Staff', {
@@ -70,6 +86,27 @@ const Profile = dbClient.define('Profile', {
   profilePicture: DataTypes.STRING,
 });
 
+//Program Model
+const Program = dbClient.define('Program', {
+  id: {
+    type: DataTypes.STRING,
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  info: {
+    type: DataTypes.JSON,
+    allowNull: false,
+  },
+});
+
 // Course Model
 const Course = dbClient.define('Course', {
   id: {
@@ -80,9 +117,6 @@ const Course = dbClient.define('Course', {
   courseCode: DataTypes.STRING,
   courseName: DataTypes.STRING,
   department: DataTypes.STRING,
-  description: DataTypes.TEXT,
-  startDate: DataTypes.DATE,
-  endDate: DataTypes.DATE,
   unit: DataTypes.INTEGER,
 });
 
@@ -122,22 +156,29 @@ const Library = dbClient.define('Library', {
   fileUrl: DataTypes.STRING,
 });
 
+// one-to-many relationship
+Program.hasMany(Student, { foreignKey: 'ProgramId' });
+Student.belongsTo(Program, { foreignKey: 'ProgramId' });
+
+// one-to-one relationship
 Student.hasOne(Profile, { foreignKey: 'studentId' });
 Profile.belongsTo(Student, { foreignKey: 'studentId' });
 
+// many-to-many relationship
 Student.belongsToMany(Course, {
   through: CourseRegistration,
   foreignKey: 'studentId',
 });
-
 Course.belongsToMany(Student, {
   through: CourseRegistration,
   foreignKey: 'courseId',
 });
 
+// one-to-many relationship
 Student.hasMany(Result, { as: 'results' });
 Result.belongsTo(Student);
 
+// one-to-many relationship
 Course.hasMany(Library);
 Library.belongsTo(Course);
 
@@ -161,6 +202,7 @@ module.exports = {
   Student,
   Staff,
   Profile,
+  Program,
   Course,
   Result,
   Library,

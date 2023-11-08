@@ -17,4 +17,20 @@ function formatDate(date) {
   return date.toLocaleDateString(undefined, options);
 }
 
-module.exports = { hashPassword, formatDate, customLogger };
+function deepCopy(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(deepCopy);
+  } else if (typeof obj === 'object' && obj !== null) {
+    const copy = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        copy[key] = deepCopy(obj[key]);
+      }
+    }
+    return copy;
+  } else {
+    return obj;
+  }
+}
+
+module.exports = { hashPassword, formatDate, customLogger, deepCopy };

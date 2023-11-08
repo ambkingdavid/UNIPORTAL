@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const dbClient = require('../utils/db').Course;
 
 
@@ -27,9 +28,21 @@ class Course {
     }
   }
 
+  // gets a list of courses from the database
+  static async getAll(courses) {
+    const courseList = await dbClient.findAll({
+      where: {
+        courseName: {
+          [Op.in] : courses,
+        },
+      },
+    });
+    return courseList;
+  }
+
   //gets students that are registered to a course
   static async getStudents(courseId) {
-    const course = dbClient.findByPk(courseId);
+    const course = await dbClient.findByPk(courseId);
     if (course) {
       const students = course.getStudents();
       return students;
