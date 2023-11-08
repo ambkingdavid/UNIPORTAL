@@ -46,10 +46,10 @@ class Course {
     const courses = [];
 
     for (const course of courseList) {
-      
+      courses.push(course.name);
     }
 
-    return courseList;
+    return courses;
   }
 
   //gets students that are registered to a course

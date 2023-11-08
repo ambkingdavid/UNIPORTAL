@@ -17,8 +17,7 @@ class StudentController {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
     }
-    const profile = await Profile.get(req.params.id);
-    const student = await profile.update(req.user.id, req.body);
+    const student = await Profile.update(req.user.id, req.body);
     return res.status(201).send('Profile Updated');
   }
 
@@ -92,7 +91,10 @@ class StudentController {
   }
 
   static async getProgramInfo(req, res) {
-
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+    const program = Student.getProgramInfo()
   }
 
   static async registerCourses(req, res) {
@@ -108,9 +110,9 @@ class StudentController {
       return res.status(401).send('Error: Unauthorized');
     }
 
-    const { courses } = req.body;
+    const { courseList, level, semester } = req.body;
     try {
-      await Student.registerCourses(req.user.id, courses);
+      Student.registerCourses(req.user.id, courseList, level, semester);
     } catch (err) {
       return res.status(401).send('Error: Unauthorized');
     }
