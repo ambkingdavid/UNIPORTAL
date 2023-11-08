@@ -4,7 +4,6 @@ import Navbar from './components/header/Navbar'
 import Home from './pages/1.home/Home'
 import About from './pages/5.about/About'
 import Contact from './pages/6.contact/Contact'
-import Events from './pages/4.dashboard/Dashboard'
 import Foot from './components/footer/Foot'
 import Login from './pages/2.0 student_login/Login'
 import Profile from './pages/7.profile/Profile'
@@ -24,21 +23,21 @@ function App() {
   return (
     <div className= 'w-screen h-screen bg-white'>
       <Router>
-      {location.pathname !== "/Dashboard" ? <Navbar /> : null}
+      {location.pathname === "/"  ? <Navbar /> : null}
         <Routes>
           <Route exact path='/' element={<Home/>} />
           <Route path='/About' element={<About/>} />
           <Route path='/Parent' element={<Parent_Login/>} />
           <Route path='/Staff' element={<Staff_Login/>} />
           <Route path='/Contact' element={<Contact/>} />
-          <Route path='/Login' element={user ? <Events/> : <Login/>} />
+          <Route path='/Login' element={user ? <Dashboard/> : <Login/>} />
           <Route path='/SignUp' element={<SignUp/>} />
           <Route path='/Profile' element={<Profile/>} />
           <Route path='/result' element={<ResultDash/>} />
           <Route path='/Dashboard' element={<Dashboard/>} />
           <Route path='/lecturerDash' element={<LecturerDash/>} />
         </Routes>
-        {location.pathname !== "/Dashboard" ? <Foot /> : null}
+        {location.pathname === "/" ? <Foot /> : null}
         </Router>
     </div>
   )

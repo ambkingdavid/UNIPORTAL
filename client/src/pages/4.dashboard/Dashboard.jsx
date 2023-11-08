@@ -7,7 +7,8 @@ import {
   LayoutDashboard,
   Settings,
   Library,
-  Home,
+  BookOpenCheck,
+  BookOpen,
 } from "lucide-react";
 import { columns, data } from "../../components/body/table_data";
 
@@ -21,8 +22,19 @@ const Dashboard = () => {
           href="/Dashboard"
         />
         <SideBarItem
+          icon={<BookOpen size={20} />}
+          text="Courses Registration"
+          href="/regCourses"
+        />
+        <SideBarItem
+          icon={<BookOpenCheck size={20} />}
+          text="Registered Courses"
+          href="/regCourses"
+        />
+
+        <SideBarItem
           icon={<BarChart3 size={20} />}
-          text="Results"
+          text="Check Results"
           href="/result"
         />
         <SideBarItem icon={<Library size={20} />} text="Resources" />
@@ -33,7 +45,7 @@ const Dashboard = () => {
           text="Profile"
           href="/Profile"
         />
-        <SideBarItem icon={<Home size={20} />} text="Home" href="/" />
+
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
       <CoursesTable column={columns} input={data} />
