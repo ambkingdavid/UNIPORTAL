@@ -7,6 +7,7 @@ export const UserData = () => {
     const level = userData.user.level;
     const semester = userData.user.semester;
     const programId = userData.user.ProgramId;
+    const studentId = userData.user.id;
 
-   return { fullName, level, semester, programId};
+   return { fullName, level, semester, programId, studentId};
 };

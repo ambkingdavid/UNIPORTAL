@@ -28,9 +28,7 @@ export default function ProfileUpdate() {
 
   const userData = useSelector((state) => state.user);
   const profileEmail = userData.user.email;
-  // const profileFirstname = userData.profile.firstname;
-  // const profileLastname = userData.profile.lastname;
-  // const profileAddress = userData.profile.address;
+  const id = userData.profile.id;
   const matric = userData.user.matric;
   const navigate = useNavigate();
 
@@ -58,7 +56,7 @@ export default function ProfileUpdate() {
     };
 
     axios
-      .put(`http://localhost:1245/student/profile`, sendData, {
+      .put(`http://localhost:1245/student/profile/${id}`, sendData, {
         withCredentials: true,
       })
       .then((response) => {

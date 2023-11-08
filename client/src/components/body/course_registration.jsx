@@ -2,6 +2,8 @@ import { useState } from "react";
 import { UserData } from "../../components/body/userData";
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const CourseRegistration = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
@@ -39,20 +41,21 @@ const CourseRegistration = () => {
     }
     setSelectedLevel(level);
   };
+  
 
   const register = (selectedCourses, selectedSemesters, selectedLevels) => {
-    const courseRegurl = "httpslocalhost:1245/course/register"; 
+    const courseRegurl = "http://localhost:1245/student/registerCourse"; 
   
     // Create an object with the data to send
     const data = {
-      selectedCourses: selectedCourses,
-      selectedSemesters: selectedSemesters,
-      selectedLevels: selectedLevels,
+      courseList: selectedCourses,
+      semester: selectedSemesters,
+      level: selectedLevels,
     };
   
     //POST request
     axios
-      .post(courseRegurl, data)
+      .post(courseRegurl, data, { withCredentials: true })
       .then((response) => {
         console.log("Registration successful:", response.data);
       })
@@ -180,6 +183,7 @@ const CourseRegistration = () => {
           <button
             className="border-2 rounded-lg px-2 bg-blue-500"
             type="submit"
+            onClick={handleRegisterClick}
           >
             Register
           </button>
