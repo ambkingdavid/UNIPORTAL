@@ -65,10 +65,6 @@ const Staff = dbClient.define('Staff', {
   },
   department: DataTypes.STRING,
   faculty: DataTypes.STRING,
-  isLoggedIn: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 // Profile Model
@@ -139,8 +135,18 @@ const Result = dbClient.define('Result', {
     defaultValue: () => uuidv4(),
     primaryKey: true,
   },
-  score: DataTypes.INTEGER,
-  dateCompleted: DataTypes.DATE,
+  score: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  GP: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  grade: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   remarks: DataTypes.STRING,
 });
 
@@ -157,8 +163,8 @@ const Library = dbClient.define('Library', {
 });
 
 // one-to-many relationship
-Program.hasMany(Student, { foreignKey: 'ProgramId' });
-Student.belongsTo(Program, { foreignKey: 'ProgramId' });
+Program.hasMany(Student, { foreignKey: 'programId' });
+Student.belongsTo(Program, { foreignKey: 'programId' });
 
 // one-to-one relationship
 Student.hasOne(Profile, { foreignKey: 'studentId' });

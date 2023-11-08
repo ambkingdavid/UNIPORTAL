@@ -4,7 +4,7 @@ const dbClient = require('../utils/db').Course;
 
 class Course {
   //adds a course to the database
-  static async add(data) {
+  static async create(data) {
     try {
       const course = await dbClient.create(data);
       const {
@@ -29,7 +29,7 @@ class Course {
   }
 
   // gets a list of courses from the database
-  static async getAll(courses) {
+  static async getCourses(courses) {
     const courseList = await dbClient.findAll({
       where: {
         courseName: {
@@ -37,6 +37,18 @@ class Course {
         },
       },
     });
+    return courseList;
+  }
+
+  static async getAllCourses() {
+    const courseList = await dbClient.findAll({});
+
+    const courses = [];
+
+    for (const course of courseList) {
+      
+    }
+
     return courseList;
   }
 
