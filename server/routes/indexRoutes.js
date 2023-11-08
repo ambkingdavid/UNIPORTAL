@@ -4,6 +4,7 @@ const AppController = require('../controllers/appController');
 const StudentController = require('../controllers/studentController');
 const StaffController = require('../controllers/staffController');
 const CourseController = require('../controllers/courseController');
+const ProgramController = require('../controllers/programController');
 
 const router = express.Router();
 
@@ -135,7 +136,7 @@ router.get('/staffs', StaffController.getAllStaffs);
 router.get('/students', StudentController.getAllStudents);
 router.get('/student/:id', StudentController.getStudent);
 router.get('/student/courses', StudentController.getStudentCourses);
-router.get('/program/:id', programController.getProgramInfo)
+router.get('/program/:id', ProgramController.getProgramInfo)
 
 // put requests - UPDATE
 router.put('/student/registerCourse', StudentController.registerCourses);
