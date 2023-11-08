@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { UserData } from "../../components/body/userData";
+import axios from "axios";
 
 const CourseRegistration = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
@@ -8,6 +10,8 @@ const CourseRegistration = () => {
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const { level, semester } = UserData();
 
   const handleCourseSelection = (e) => {
     const course = e.target.value;
@@ -35,6 +39,33 @@ const CourseRegistration = () => {
     }
     setSelectedLevel(level);
   };
+
+  const register = (selectedCourses, selectedSemesters, selectedLevels) => {
+    const courseRegurl = "httpslocalhost:1245/course/register"; 
+  
+    // Create an object with the data to send
+    const data = {
+      selectedCourses: selectedCourses,
+      selectedSemesters: selectedSemesters,
+      selectedLevels: selectedLevels,
+    };
+  
+    //POST request
+    axios
+      .post(courseRegurl, data)
+      .then((response) => {
+        console.log("Registration successful:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error registering courses:", error);
+      });
+  };
+
+  const handleRegisterClick = () => {
+    register(selectedCourses, selectedSemesters, selectedLevels);
+  };
+  
+  
 
   const combinedData = selectedCourses.map((course, index) => ({
     course,
@@ -94,8 +125,14 @@ const CourseRegistration = () => {
               <option value="" selected>
                 None
               </option>
-              <option value="1st Semester">1st Semester</option>
-              <option value="2nd Semester">2nd Semester</option>
+              {[1, 2].map(
+                (optionSem) =>
+                  optionSem <= semester && (
+                    <option key={optionSem} value={optionSem}>
+                      {`semester ${optionSem} `}
+                    </option>
+                  )
+              )}
             </select>
 
             <label htmlFor="levelSelect">Level:</label>
@@ -108,10 +145,14 @@ const CourseRegistration = () => {
               <option value="" selected>
                 None
               </option>
-              <option value="100 level">100 level</option>
-              <option value="200 level">200 level</option>
-              <option value="300 level">300 level</option>
-              <option value="400 level">400 level</option>
+              {[100, 200, 300, 400, 500].map(
+                (optionLevel) =>
+                  optionLevel <= level && (
+                    <option key={optionLevel} value={optionLevel}>
+                      {`${optionLevel} level`}
+                    </option>
+                  )
+              )}
             </select>
           </div>
 

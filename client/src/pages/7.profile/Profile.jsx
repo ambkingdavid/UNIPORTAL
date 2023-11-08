@@ -10,10 +10,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signup, cancel } from "../../slices/signupSlice";
+import { cancel } from "../../slices/signupSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar, { SideBarItem } from "../../components/body/Side";
+import { save } from "../../slices/saveProfileSlice";
 
 export default function ProfileUpdate() {
   const [firstname, setFirstname] = useState("");
@@ -27,9 +28,9 @@ export default function ProfileUpdate() {
 
   const userData = useSelector((state) => state.user);
   const profileEmail = userData.user.email;
-  const profileFirstname = userData.profile.firstname;
-  const profileLastname = userData.profile.lastname;
-  const profileAddress = userData.profile.address;
+  // const profileFirstname = userData.profile.firstname;
+  // const profileLastname = userData.profile.lastname;
+  // const profileAddress = userData.profile.address;
   const matric = userData.user.matric;
   const navigate = useNavigate();
 
@@ -45,9 +46,9 @@ export default function ProfileUpdate() {
     e.preventDefault();
 
     // Create an object with the data to send to the server
-    const userData = {
-      firstname,
-      lastname,
+    const sendData = {
+      firstName: firstname,
+      lastName: lastname,
       password,
       country,
       address: streetAddress,
@@ -56,29 +57,14 @@ export default function ProfileUpdate() {
       postalcode,
     };
 
-    // // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
-    // axios.post('http://localhost:1245/profile', userData)
-    //   .then((response) => {
-    //     // Handle the response from the server here
-    //     console.log('Successful response:', response.data);
-
-    //     //  dispatch Redux actions or perform actions as needed
-    //     dispatch(signup({ ...userData, loggedIn: true }));
-    //   })
-    //   .catch((error) => {
-    //     // Handle any errors here
-    //     console.error('Error:', error);
-    //   });
-
-    // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
     axios
-      .put(`http://localhost:1245/students`, userData)
+      .put(`http://localhost:1245/student/profile`, sendData, {
+        withCredentials: true,
+      })
       .then((response) => {
-        // Handle the response from the server here
         console.log("Successful response:", response.data);
 
-        // dispatch Redux actions or perform actions as needed
-        //dispatch(signup({ ...userData, loggedIn: true }));
+        dispatch(save({ ...sendData, loggedIn: true }));
       })
       .catch((error) => {
         // Handle any errors here
@@ -88,7 +74,7 @@ export default function ProfileUpdate() {
 
   return (
     <div className="flex flex-row gap-2">
-      <div className= "h-screen">
+      <div className="h-screen">
         <Sidebar>
           <SideBarItem
             icon={<LayoutDashboard size={20} />}
@@ -181,8 +167,8 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="first-name"
-                      value={profileFirstname}
-                      // onChange={(e) => setFirstname(e.target.value)}
+                      // value=""
+                      onChange={(e) => setFirstname(e.target.value)}
                       id="first-name"
                       autoComplete="given-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -201,8 +187,8 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="last-name"
-                      value={profileLastname}
-                      // onChange={(e) => setLastname(e.target.value)}
+                      //  value=""
+                      onChange={(e) => setLastname(e.target.value)}
                       id="last-name"
                       autoComplete="family-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -222,7 +208,7 @@ export default function ProfileUpdate() {
                       type="password"
                       name="password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      // onChange={(e) => setPassword(e.target.value)}
                       id="password"
                       autoComplete="password"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -261,8 +247,7 @@ export default function ProfileUpdate() {
                     <select
                       id="country"
                       name="country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
+                      //value={country}
                       autoComplete="country-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
@@ -284,8 +269,8 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="street-address"
-                      value={profileAddress}
-                      // onChange={(e) => setStreetAddress(e.target.value)}
+                      //value=""
+                      onChange={(e) => setStreetAddress(e.target.value)}
                       id="street-address"
                       autoComplete="street-address"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -304,7 +289,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="city"
-                      value={city}
+                      // value={city}
                       onChange={(e) => setCity(e.target.value)}
                       id="city"
                       autoComplete="address-level2"
@@ -324,7 +309,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="region"
-                      value={state}
+                      //  value={state}
                       onChange={(e) => setState(e.target.value)}
                       id="region"
                       autoComplete="address-level1"
@@ -344,7 +329,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="postal-code"
-                      value={postalcode}
+                      // value={postalcode}
                       onChange={(e) => setPostalcode(e.target.value)}
                       id="postal-code"
                       autoComplete="postal-code"
@@ -364,6 +349,7 @@ export default function ProfileUpdate() {
               </button>
               <button
                 type="submit"
+                onClick={(e) => handleSubmit(e)}
                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Save

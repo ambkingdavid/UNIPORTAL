@@ -15,10 +15,27 @@ import Staff_Login from './pages/2.2 staff_login/Staff_Login'
 import Parent_Login from './pages/2.1 parent_login/Parent_Login'
 import LecturerDash from './pages/4.1 lecturer_dashboard/lecturer_dash'
 import ResultDash from './pages/4.2 result_dash/result_dash'
+import Course_reg from './pages/4.3 course_reg/course_reg'
+import axios from 'axios'
 
 
 function App() {
   const user = useSelector(selectUser);
+
+
+  const serverEndpoint = "http://localhost:1245/student/courses"; // Replace with your server's actual endpoint
+
+// Make the GET request
+axios
+  .get(serverEndpoint, {withCredentials: true})
+  .then((response) => {
+    // Handle the successful response here
+    console.log("Data received:", response.data);
+  })
+  .catch((error) => {
+    // Handle any errors here
+    console.error("Error:", error);
+  });
 
   return (
     <div className= 'w-screen h-screen bg-white'>
@@ -35,6 +52,7 @@ function App() {
           <Route path='/Profile' element={<Profile/>} />
           <Route path='/result' element={<ResultDash/>} />
           <Route path='/Dashboard' element={<Dashboard/>} />
+          <Route path='/regCourses' element={<Course_reg/>} />
           <Route path='/lecturerDash' element={<LecturerDash/>} />
         </Routes>
         {location.pathname === "/" ? <Foot /> : null}
