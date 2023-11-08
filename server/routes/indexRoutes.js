@@ -22,6 +22,7 @@ router.get('/student/:id', StudentController.getStudent);
 router.get('/student/courses', StudentController.getStudentCourses);
 
 // put requests - UPDATE
+router.put('/student/registerCourse', StudentController.registerCourses);
 router.put('/student/profile', StudentController.updateStudentProfile);
 router.put('/student/updatePassword', StudentController.updatePassword);
 router.put('/staff/updatePassword', StaffController.updatePassword);
