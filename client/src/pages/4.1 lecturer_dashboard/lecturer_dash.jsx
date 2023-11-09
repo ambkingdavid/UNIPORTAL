@@ -19,8 +19,8 @@ const LecturerDash = () => {
           href="/lecturerDash"
         />
         <SideBarItem icon={<BarChart3 size={20} />} text="Results" />
-        <SideBarItem icon={<Library size={20} />} text="Resources" />
-        <SideBarItem icon={<Sheet size={20} />} text="Transcript" />
+        {/* <SideBarItem icon={<Library size={20} />} text="Resources" />
+        <SideBarItem icon={<Sheet size={20} />} text="Transcript" /> */}
         <hr className="my-3" />
         <SideBarItem
           icon={<Settings size={20} />}
