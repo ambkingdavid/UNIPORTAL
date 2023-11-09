@@ -12,6 +12,7 @@
   "author": "Kelvin Wooldbridge and Benjamin Princewill",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "prop-types": "^15.8.1"
   }
 }
