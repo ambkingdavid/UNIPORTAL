@@ -31,7 +31,7 @@ for (let i = 1; i <= 20; i++) {
 }
 
 for (const studentData of studentsData) {
-  Student.add(studentData)
+  Student.create(studentData)
   .then((result) => {
     console.log(`Student created with matric ${studentData.matric}`);
   })

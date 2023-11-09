@@ -57,14 +57,7 @@ class Course {
   // gets all courses from the database
   static async getAllCourses() {
     const courseList = await dbClient.findAll({});
-
-    const courses = [];
-
-    for (const course of courseList) {
-      courses.push(course.name);
-    }
-
-    return courses;
+    return courseList;
   }
 
   //gets students that are registered to a course

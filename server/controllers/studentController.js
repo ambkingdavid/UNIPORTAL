@@ -74,7 +74,7 @@ class StudentController {
       return res.status(401).send('Error: Unauthorized');
     }
     const studentId = req.user.id;
-    const courseList = Student.getcourses(studentId);
+    const courseList = Student.getCourses(studentId);
     const courses = {};
     for (const course of courseList) {
       const { level, semester } = course.dataValues.CourseRegistration;
@@ -123,11 +123,68 @@ class StudentController {
     const { matric, email } = req.body;
     const user = Student.changePassword(matric, email);
 
-    if (!user) {
+    if (user) {
       return res.status(401).send('Error: Unauthorized');
     }
 
     return res.status(201).send('paswword changed')
+  }
+
+  // get student results
+  static async getResult(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    let result;
+
+    try {
+      const student = await Student.find({
+        id: req.user.id,
+      });
+
+      result = Student.getResult(student.id)
+    } catch (err) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(200).send({})
+  }
+
+  // get student profile
+  static async getStudentProfile(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    let profile;
+
+    try {
+      const student = await Student.find({
+        id: req.user.id,
+      });
+
+      profile = Student.getStudentProfile(student.id);
+    } catch (err) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    return res.status(200).send(profile);
+  }
+
+  // get students result
+  static async getStudentResult(req, res) {
+    if (!req.user) {
+      return res.status(401).send('Error: Unauthorized');
+    }
+
+    const results = Student.getResult(req.user.id);
+
+    if (results.length < 1) {
+      return res.status(404).send('Error: Not Found');
+    }
+
+    return res.status(200).send(results);
   }
 }
 

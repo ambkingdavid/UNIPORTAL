@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 const dbClient = require('../utils/db').Student;
 const Profile = require('./profile.model');
 const Course = require('./course.model');
-const Program = require('./program.model');
+const Result = require('../models/result.model');
+const { Program } = require('../utils/db');
+const ProgramModel = require('../models/program.model');
 const { hashPassword } = require('../utils/helpers');
 const { customLogger } = require('../utils/helpers');
 
@@ -24,7 +26,7 @@ class Student {
 
     try {
       const newStudent = await dbClient.create(dataCopy);
-      const program = await Program.getProgramByNameAndCategory(dataCopy.courseOfStudy, dataCopy.degree);
+      const program = await ProgramModel.getProgramByNameAndCategory(dataCopy.courseOfStudy, dataCopy.degree);
 
       await program.addStudent(newStudent);
       const profile = await Profile.createProfile(newStudent.id, {});
@@ -53,18 +55,13 @@ class Student {
   * @returns {Promise<Student[]>} A Promise that resolves to an array of student object(s).
   * @throws {Error} If there is an error while fetching students.
   */
-  static async findAll(query) {
-    const students = await dbClient.findAll(query);
-
-    const studentsData = students.map((user) => {
-      const {
-        password,
-        ...studentData
-      } = user.dataValues;
-      return studentData;
+  static async findAll(query = {}) {
+    const students = await dbClient.findAll({
+      where: query,
+      include: [Program],
     });
 
-    return studentsData;
+    return students;
   }
 
   /**
@@ -105,7 +102,7 @@ class Student {
       throw new Error('User not found');
     }
     const profile = await student.getProfile();
-    const program = await Program.getProgramByNameAndCategory(student.courseOfStudy, student.degree);
+    const program = await ProgramModel.getProgramByNameAndCategory(student.courseOfStudy, student.degree);
 
     const {
       password,
@@ -210,13 +207,19 @@ class Student {
    * @throws {Error} If the student is not found.
    */
 
-  static async getcourses(studentId) {
+  static async getCourses(studentId) {
     const student = await dbClient.findByPk(studentId);
     if (!student) {
       throw new Error('Student not null');
     }
     const courses = await student.getCourses();
     return courses;
+  }
+
+  static async getResult(studentId) {
+    const results = Result.getResults(studentId)
+
+    return results;
   }
 }
 
