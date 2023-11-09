@@ -28,7 +28,13 @@ class CourseController {
     if (!req.user) {
       return res.status(401).send('Unauthorized');
     }
-    const courses = Course.getAllCourses();
+    const courseList = Course.getAllCourses();
+
+    const courses = [];
+
+    for (const course of courseList) {
+      courses.push(course.name);
+    }
 
     res.status(200).send(courses)
   }

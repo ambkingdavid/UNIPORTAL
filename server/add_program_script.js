@@ -503,7 +503,7 @@ async function createProgramAndCourses() {
               department: department,
               unit: 3,
             };
-            await Course.add(newCourse);
+            await Course.create(newCourse);
           } else {
             console.warn(`Course data not found for "${courseName}".`);
           }

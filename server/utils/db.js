@@ -140,7 +140,7 @@ const Result = dbClient.define('Result', {
     allowNull: false,
   },
   GP: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   grade: {
@@ -181,8 +181,12 @@ Course.belongsToMany(Student, {
 });
 
 // one-to-many relationship
-Student.hasMany(Result, { as: 'results' });
-Result.belongsTo(Student);
+Student.hasMany(Result, { foreignKey: 'studentId' });
+Result.belongsTo(Student, { foreignKey: 'studentId' });
+
+// one-to-many relationship
+Course.hasMany(Result, { foreignKey: 'courseId' });
+Result.belongsTo(Course, { foreignKey: 'courseId' });
 
 // one-to-many relationship
 Course.hasMany(Library);
