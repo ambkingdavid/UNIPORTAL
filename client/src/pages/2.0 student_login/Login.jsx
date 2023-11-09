@@ -37,6 +37,7 @@ export default function Login() {
         dispatch(setUser(response.data));
         // Login was successful, so navigate to the dashboard page
         navigate("/Dashboard");
+        
       }
     } catch (error) {
       //  show an error message

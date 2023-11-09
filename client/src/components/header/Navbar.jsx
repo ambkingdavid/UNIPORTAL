@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -6,7 +6,7 @@ import uniportal from "../../assets/uniportal.jpg";
 import { LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useStatus } from "../body/status";
-import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const navigation = [
   { name: "Home", href: "/", current: true },
@@ -21,6 +21,9 @@ function classNames(...classes) {
 export default function Navbar() {
   const navigate = useNavigate();
   const status = useStatus();
+
+  const userData = useSelector((state) => state.user);
+  console.log(userData.user);
 
   const handleNavigate = () => {
     navigate("/SignUp");
@@ -87,7 +90,9 @@ export default function Navbar() {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              href="/Login"
+                              href={
+                                userData.user === null ? "/Login" : "/Dashboard"
+                              }
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"

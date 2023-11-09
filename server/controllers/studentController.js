@@ -2,7 +2,7 @@ const Student = require('../models/student.model');
 const Profile = require('../models/profile.model');
 
 class StudentController {
-  //
+  // adds a student
   static async addUser(req, res) {
     try {
       const newUser = await Student.create(req.body);
@@ -39,6 +39,7 @@ class StudentController {
     return res.status(200).send({ loggedIn: true });
   }
 
+  // gets all student
   static async getAllStudents(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
@@ -54,6 +55,7 @@ class StudentController {
     return res.status(200).send(users);
   }
 
+  // gets a student
   static async getStudent(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
@@ -66,6 +68,7 @@ class StudentController {
     return res.status(200).send(student);
   }
 
+  // gets all courses beloging to a student
   static async getStudentCourses(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
@@ -90,13 +93,7 @@ class StudentController {
     return res.status(200).send(courses);
   }
 
-  static async getProgramInfo(req, res) {
-    if (!req.user) {
-      return res.status(401).send('Error: Unauthorized');
-    }
-    const program = Student.getProgramInfo()
-  }
-
+  // register courses
   static async registerCourses(req, res) {
     if (!req.user) {
       return res.status(401).send('Error: Unauthorized');
@@ -110,9 +107,9 @@ class StudentController {
       return res.status(401).send('Error: Unauthorized');
     }
 
-    const { courseList, level, semester } = req.body;
+    const { courseList } = req.body;
     try {
-      Student.registerCourses(req.user.id, courseList, level, semester);
+      Student.registerCourses(req.user.id, courseList);
     } catch (err) {
       return res.status(401).send('Error: Unauthorized');
     }
@@ -120,6 +117,8 @@ class StudentController {
     return res.status(201).send('Courses added');
   }
 
+
+  // change password
   static async updatePassword(req, res) {
     const { matric, email } = req.body;
     const user = Student.changePassword(matric, email);

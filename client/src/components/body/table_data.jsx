@@ -1,4 +1,31 @@
+import axios from "axios";
 import { Activity, MoreVertical } from "lucide-react";
+import { UserData } from "../../components/body/userData";
+
+axios.defaults.withCredentials = true;
+
+export const getCourseData = () => {
+  const { courseOfStudy, degree } = UserData();
+  const url = `http://localhost:1245/program`;
+
+  useEffect(() => {
+    axios
+      .get(url, { 
+        params: {
+          courseOfStudy: courseOfStudy,
+          category: degree},
+        withCredentials: true })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  return data;
+};
 
 export const columns = [
   {
