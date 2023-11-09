@@ -11,8 +11,8 @@ const SidebarContext = createContext();
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true);
   const userData = useSelector((state) => state.user);
-  const profileName = userData.user.email;
-  const profileEmail = userData.user.email;
+  const profileName = userData.user?.email;
+  const profileEmail = userData.user?.email;
 
   return (
     <aside className="h-screen">

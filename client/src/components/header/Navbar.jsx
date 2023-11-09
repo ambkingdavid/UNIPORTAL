@@ -102,7 +102,7 @@ export default function Navbar() {
                             </a>
                           )}
                         </Menu.Item>
-                        <Menu.Item>
+                        {/* <Menu.Item>
                           {({ active }) => (
                             <a
                               href="/Parent"
@@ -127,16 +127,16 @@ export default function Navbar() {
                               Staff
                             </a>
                           )}
-                        </Menu.Item>
+                        </Menu.Item> */}
                       </Menu.Items>
                     </Transition>
                   </Menu>
-                  <button
+                  {/* <button
                     className="px-3 py-1 border rounded-md"
                     onClick={handleNavigate}
                   >
                     Sign Up
-                  </button>
+                  </button> */}
                 </div>
               ) : null}
               {location.pathname !== "/Login" && location.pathname !== "/" ? (

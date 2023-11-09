@@ -29,11 +29,11 @@ export default function ProfileUpdate() {
   const [postalcode, setPostalcode] = useState("");
 
   const userData = useSelector((state) => state.user);
-  const profileEmail = userData.user.email;
-  const profileFirstname = userData.profile.firstName;
-  const profileLastname = userData.profile.lastName;
-  const profilePostalcode = userData.profile.phoneNumber;
-  const matric = userData.user.matric;
+  const profileEmail = userData.user?.email;
+  const profileFirstname = userData.profile?.firstName;
+  const profileLastname = userData.profile?.lastName;
+  const profilePostalcode = userData.profile?.phoneNumber;
+  const matric = userData.user?.matric;
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -100,8 +100,8 @@ export default function ProfileUpdate() {
             text="Check Results"
             href="/result"
           />
-          <SideBarItem icon={<Library size={20} />} text="Resources" />
-          <SideBarItem icon={<Sheet size={20} />} text="Transcript" />
+          {/* <SideBarItem icon={<Library size={20} />} text="Resources" />
+          <SideBarItem icon={<Sheet size={20} />} text="Transcript" /> */}
           <hr className="my-3" />
           <SideBarItem
             icon={<Settings size={20} />}
