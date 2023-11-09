@@ -1,3 +1,4 @@
+import RegisteredCourses from "../../components/body/RegisteredCourses";
 import Sidebar, { SideBarItem } from "../../components/body/Side";
 import {
   HelpCircle,
@@ -13,7 +14,7 @@ import { columns, data } from "../../components/body/result_data";
 
 const RegCourse = () => {
   return (
-    <div className="flex flex-row text-center">
+    <div className="flex flex-row text-center w-full">
      <Sidebar>
         <SideBarItem
           icon={<LayoutDashboard size={20} />}
@@ -47,6 +48,7 @@ const RegCourse = () => {
 
         <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
       </Sidebar>
+      <RegisteredCourses column={columns} input={data}/>
     </div>
   );
 };
