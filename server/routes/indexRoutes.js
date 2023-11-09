@@ -95,7 +95,7 @@ router.get('/staff/me', StaffController.getMe);
 
 /**
  * @swagger
- * /api/staffs:
+ * /staffs:
  *   get:
  *     summary: Get a list of staff members.
  *     description: Retrieve a list of staff members from the database.
@@ -136,7 +136,7 @@ router.get('/staffs', StaffController.getAllStaffs);
 router.get('/students', StudentController.getAllStudents);
 router.get('/student/:id', StudentController.getStudent);
 router.get('/student/courses', StudentController.getStudentCourses);
-router.get('/program', ProgramController.getStudentProgram)
+router.get('/program/:name', ProgramController.getStudentProgram);
 
 // put requests - UPDATE
 router.put('/student/registerCourse', StudentController.registerCourses);

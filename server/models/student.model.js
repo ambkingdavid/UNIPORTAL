@@ -105,6 +105,7 @@ class Student {
       throw new Error('User not found');
     }
     const profile = await student.getProfile();
+    const program = await Program.getProgramByNameAndCategory(student.courseOfStudy, student.degree);
 
     const {
       password,
@@ -114,6 +115,7 @@ class Student {
     return {
       user: studentData,
       profile,
+      program,
     };
   }
 
@@ -176,28 +178,27 @@ class Student {
  * Registers courses for a student based on the provided course list.
  *
  * @param {string} studentId - The identifier of the student.
- * @param {string[]} courseList - An array of course identifiers to be registered.
- * @param {string} level
- * @param {string} semester
+ * @param {object[]} courseList - An array of course identifier objects.
+ * 
  * @returns {null} Returns null.
  * @throws {Error} If the student is not found, or if there are no courses to register.
  */
 
-  static async registerCourses(studentId, courseList, level, semester) {
+  static async registerCourses(studentId, courseList) {
     const student = await dbClient.findByPk(studentId);
     if (!student) {
       throw new Error('Student not found');
     }
-    const courses = await Course.getAll(courseList);
-    if (student && courses.length > 0) {
-      for (const course of courses) {
-        await student.addCourses(course, {
-          through: {
-            level,
-            semester,
-          }
-        });
-      }
+    for (const courseObj of courseList) {
+      const { courseName, level, semester } = courseObj;
+
+      const course = await Course.getCourseByName(courseName);
+      await student.addCourses(course, {
+        through: {
+          level,
+          semester,
+        }
+      });
     }
   }
 

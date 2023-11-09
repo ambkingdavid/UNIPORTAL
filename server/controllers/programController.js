@@ -6,8 +6,9 @@ class ProgramController {
       return res.status(401).send('Error: Unauthorized');
     }
 
-    const { courseOfStudy, degree } = req.query;
-    const program = await Program.getProgramByNameAndCategory(courseOfStudy, degree);
+    const { name } = req.params;
+    const { category } = req.query;
+    const program = await Program.getProgramByNameAndCategory(name, category);
 
     req.status(200).send(program);
   }

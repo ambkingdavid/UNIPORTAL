@@ -19,9 +19,23 @@ class Course {
   }
 
   // gets a course with the courseId
-  static async get(courseId) {
+  static async getCourseById(courseId) {
     try {
       const course = await dbClient.findByPk(courseId);
+      return course;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  // gets a course by name
+  static async getCourseByName(courseName) {
+    try {
+      const course = await dbClient.findOne({
+        where: {
+          courseName,
+        },
+      });
       return course;
     } catch (err) {
       throw err;
@@ -40,6 +54,7 @@ class Course {
     return courseList;
   }
 
+  // gets all courses from the database
   static async getAllCourses() {
     const courseList = await dbClient.findAll({});
 
