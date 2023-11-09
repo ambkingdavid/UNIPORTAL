@@ -16,7 +16,7 @@ import Parent_Login from './pages/2.1 parent_login/Parent_Login'
 import LecturerDash from './pages/4.1 lecturer_dashboard/lecturer_dash'
 import ResultDash from './pages/4.2 result_dash/result_dash'
 import RegCourse from './pages/4.4 reg_course/reg_course'
-import CourseReg from './pages/4.3 course_reg/course_reg'
+import CourseReg from './pages/4.3 course_reg/Course_reg'
 
 
 function App() {
