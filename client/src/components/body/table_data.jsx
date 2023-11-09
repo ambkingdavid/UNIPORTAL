@@ -1,30 +1,34 @@
 import axios from "axios";
-import { Activity, MoreVertical } from "lucide-react";
+import { Activity } from "lucide-react";
 import { UserData } from "../../components/body/userData";
+import { useEffect, useState } from "react";
 
 axios.defaults.withCredentials = true;
 
-export const getCourseData = () => {
+export const GetData = () => {
   const { courseOfStudy, degree } = UserData();
-  const url = `http://localhost:1245/program`;
+  const [responseData, setResponseData] = useState(null);
+  const url = "http://localhost:1245/program";
 
   useEffect(() => {
     axios
-      .get(url, { 
+      .get(url, {
         params: {
           courseOfStudy: courseOfStudy,
-          category: degree},
-        withCredentials: true })
+          degree: degree,
+        },
+      })
       .then((response) => {
         const data = response.data;
         console.log(data);
+        setResponseData(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
 
-  return data;
+  return responseData;
 };
 
 export const columns = [
@@ -56,12 +60,6 @@ export const columns = [
   {
     name: "Progress",
     selector: (row) => row.progress,
-  },
-  {
-    cell: (row) => <MoreVertical size="small" row={row} strokeWidth="1px" />,
-    allowOverflow: true,
-    button: true,
-    width: "46px",
   },
 ];
 

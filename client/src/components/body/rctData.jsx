@@ -1,24 +1,9 @@
-
-
-import axios from "axios";
 import { Activity } from "lucide-react";
+import { UserData } from "../../components/body/userData";
 
+const userData = UserData(); // Retrieve user data
 
-const serverEndpoint = "http://localhost:1245/student/courses"; // Replace with your server's actual endpoint
-
-// Make the GET request
-axios
-  .get(serverEndpoint, {withCredentials: true})
-  .then((response) => {
-    // Handle the successful response here
-    console.log("Data received:", response.data);
-  })
-  .catch((error) => {
-    // Handle any errors here
-    console.error("Error:", error);
-  });
-
-export const columns = [
+const columns = [
   {
     cell: () => <Activity style={{ fill: "#43a047" }} />,
     width: "56px", // custom width for icon button
@@ -27,55 +12,40 @@ export const columns = [
       marginBottom: "-1px",
     },
   },
-    {
-      name: "Courses",
-      selector: (row) => row.courses,
-    },
-    {
-      name: "Course Code",
-      selector: (row) => row.course_code,
-    },
-    {
-      name: "Course Unit",
-      selector: (row) => row.course_unit,
-    },
-    {
-      name: "Grade",
-      selector: (row) => row.grade,
-    },
-    {
-      name: "Semester",
-      selector: (row) => row.semester,
-    },
-    {
-      name: "Level",
-      selector: (row) => row.level,
-    },
-  ];
-  
-  export const data = [
-    {
-      courses: "Beetlejuice",
-      course_code: "CSC-101",
-      course_unit: "3",
-      grade: "A",
-      semester: "1st Semester",
-      level: "100",
-    },
-    {
-      courses: "Beetlejuice",
-      course_code: "CSC-211",
-      course_unit: "3",
-      grade: "B",
-      semester: "1st Semester",
-      level: "200",
-    },
-    {
-      courses: "Beetlejuice",
-      course_code: "CSC-311",
-      course_unit: "2",
-      grade: "C",
-      semester: "1st Semester",
-      level: "300",
-    },
-  ];
+  {
+    name: "Courses",
+    selector: (row) => row.courses,
+  },
+  {
+    name: "Course Code",
+    selector: (row) => row.course_code,
+  },
+  {
+    name: "Course Unit",
+    selector: (row) => row.course_unit,
+  },
+  {
+    name: "Grade",
+    selector: (row) => row.grade,
+  },
+  {
+    name: "Semester",
+    selector: (row) => row.semester,
+  },
+  {
+    name: "Level",
+    selector: (row) => row.level,
+  },
+];
+
+// Dynamically generate the data array from user data
+const data = userData.courses.map((course) => ({
+  courses: course.name,
+  course_code: course.code,
+  course_unit: course.unit,
+  grade: course.grade,
+  semester: course.semester,
+  level: course.level,
+}));
+
+export { columns, data };

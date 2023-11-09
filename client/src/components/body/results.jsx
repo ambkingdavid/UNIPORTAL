@@ -26,7 +26,7 @@ const ResultsTable = ({ columns, data }) => {
           id="semesterSelect"
           onChange={handleChange}
         >
-          <option value="" selected>
+          <option value="">
             None
           </option>
           <option value="100">100</option>
