@@ -4,12 +4,13 @@ import { customStyles } from "../../components/body/custom_table_style";
 import { UserData } from "../../components/body/userData";
 
 const CoursesTable = ({ column, input }) => {
-  const { fullName, level, semester } = UserData();
+  const { fullName, level, semester, department } = UserData();
 
   return (
     <div className="flex flex-col h-screen w-screen gap-4">
       <div>
         <p>Name: {fullName}</p>
+        <p>Department: {department}</p>
         <p>Level: {level}</p>
         <p>Semester: {semester}</p>
       </div>

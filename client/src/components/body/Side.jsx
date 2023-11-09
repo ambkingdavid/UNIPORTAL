@@ -100,7 +100,7 @@ export function SideBarItem({ icon, text, href, active }) {
 }
 
 SideBarItem.propTypes = {
-  text: PropTypes.func,
+  text: PropTypes.string,
   active: PropTypes.any,
   icon: PropTypes.any,
   href: PropTypes.any,

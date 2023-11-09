@@ -7,6 +7,8 @@ import {
   Settings,
   Library,
   Home,
+  BookOpen,
+  BookOpenCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +16,7 @@ import { cancel } from "../../slices/signupSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar, { SideBarItem } from "../../components/body/Side";
-import { save } from "../../slices/saveProfileSlice";
+import { updateUser } from "../../slices/userSlice";
 
 export default function ProfileUpdate() {
   const [firstname, setFirstname] = useState("");
@@ -28,6 +30,9 @@ export default function ProfileUpdate() {
 
   const userData = useSelector((state) => state.user);
   const profileEmail = userData.user.email;
+  const profileFirstname = userData.profile.firstName;
+  const profileLastname = userData.profile.lastName;
+  const profilePostalcode = userData.profile.phoneNumber;
   const matric = userData.user.matric;
   const navigate = useNavigate();
 
@@ -49,7 +54,7 @@ export default function ProfileUpdate() {
       password,
       country,
       address: streetAddress,
-      city,
+      phoneNumber: postalcode,
       state,
       postalcode,
     };
@@ -60,8 +65,9 @@ export default function ProfileUpdate() {
       })
       .then((response) => {
         console.log("Successful response:", response.data);
+        const updatedData = response.data;
 
-        dispatch(save({ ...sendData, loggedIn: true }));
+        dispatch(updateUser(updatedData));
       })
       .catch((error) => {
         // Handle any errors here
@@ -79,8 +85,19 @@ export default function ProfileUpdate() {
             href="/Dashboard"
           />
           <SideBarItem
+            icon={<BookOpen size={20} />}
+            text="Courses Registration"
+            href="/regCourses"
+          />
+          <SideBarItem
+            icon={<BookOpenCheck size={20} />}
+            text="Registered Courses"
+            href="/regCourses"
+          />
+
+          <SideBarItem
             icon={<BarChart3 size={20} />}
-            text="Results"
+            text="Check Results"
             href="/result"
           />
           <SideBarItem icon={<Library size={20} />} text="Resources" />
@@ -91,7 +108,7 @@ export default function ProfileUpdate() {
             text="Profile"
             href="/Profile"
           />
-          <SideBarItem icon={<Home size={20} />} text="Home" href="/" />
+
           <SideBarItem icon={<HelpCircle size={20} />} text="FAQ" />
         </Sidebar>
       </div>
@@ -164,7 +181,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="first-name"
-                      // value=""
+                      placeholder={profileFirstname}
                       onChange={(e) => setFirstname(e.target.value)}
                       id="first-name"
                       autoComplete="given-name"
@@ -184,7 +201,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="last-name"
-                      //  value=""
+                      placeholder={profileLastname}
                       onChange={(e) => setLastname(e.target.value)}
                       id="last-name"
                       autoComplete="family-name"
@@ -326,7 +343,7 @@ export default function ProfileUpdate() {
                     <input
                       type="text"
                       name="postal-code"
-                      // value={postalcode}
+                      placeholder={profilePostalcode}
                       onChange={(e) => setPostalcode(e.target.value)}
                       id="postal-code"
                       autoComplete="postal-code"

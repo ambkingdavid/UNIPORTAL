@@ -19,6 +19,7 @@ const CourseRegistration = () => {
     const course = e.target.value;
     if (selectedCourses.length < 10 && !selectedCourses.includes(course)) {
       setSelectedCourses([...selectedCourses, course]);
+      
     }
     setSelectedCourse(course);
   };
@@ -41,23 +42,31 @@ const CourseRegistration = () => {
     }
     setSelectedLevel(level);
   };
-  
 
   const register = (selectedCourses, selectedSemesters, selectedLevels) => {
-    const courseRegurl = "http://localhost:1245/student/registerCourse"; 
-  
+    const courseRegurl = "http://localhost:1245/student/registerCourse";
+
     // Create an object with the data to send
-    const data = {
-      courseList: selectedCourses,
-      semester: selectedSemesters,
-      level: selectedLevels,
-    };
-  
-    //POST request
+    const courseList = selectedCourses.map((course, index) => ({
+      courseName: course,
+      level: selectedLevels[index],
+      semester: selectedSemesters[index],
+    }));
+
+    console.log(courseList);
+
+    //PUT request
     axios
-      .post(courseRegurl, data, { withCredentials: true })
+      .put(courseRegurl, {courseList}, { withCredentials: true })
       .then((response) => {
-        console.log("Registration successful:", response.data);
+        if (response.status === 201) {
+          setRegistrationSuccess(true);
+          console.log("Registration successful:", response.data);
+        }
+        else {
+          setRegistrationSuccess(false)
+          console.log("Registration failed:", response.data);
+        }
       })
       .catch((error) => {
         console.error("Error registering courses:", error);
@@ -67,8 +76,6 @@ const CourseRegistration = () => {
   const handleRegisterClick = () => {
     register(selectedCourses, selectedSemesters, selectedLevels);
   };
-  
-  
 
   const combinedData = selectedCourses.map((course, index) => ({
     course,
@@ -90,8 +97,24 @@ const CourseRegistration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setRegistrationSuccess(true);
+    setRegistrationSuccess();
   };
+
+  const userData = UserData(); // Retrieve user data
+
+  // Assuming userData.courses is an array of course names
+  const courseOptions = userData.courses.map((course) => (
+    <option key={course} value={course}>
+      {course}
+    </option>
+  ));
+
+  // Add the "None" option as the first option
+  courseOptions.unshift(
+    <option key="None" value="">
+      None
+    </option>
+  );
 
   return (
     <div className="flex flex-col items-center mx-auto gap-5">
@@ -109,13 +132,7 @@ const CourseRegistration = () => {
               value={selectedCourse || ""}
               onChange={handleCourseSelection}
             >
-              <option value="" selected>
-                None
-              </option>
-              <option value="Course A">Course A</option>
-              <option value="Course B">Course B</option>
-              <option value="Course C">Course C</option>
-              <option value="Course D">Course D</option>
+              {courseOptions}
             </select>
 
             <label htmlFor="semesterSelect">Semester:</label>
@@ -125,9 +142,7 @@ const CourseRegistration = () => {
               value={selectedSemester || ""}
               onChange={handleSemesterSelection}
             >
-              <option value="" selected>
-                None
-              </option>
+              <option value="">None</option>
               {[1, 2].map(
                 (optionSem) =>
                   optionSem <= semester && (
