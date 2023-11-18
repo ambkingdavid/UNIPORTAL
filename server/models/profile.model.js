@@ -1,52 +1,36 @@
-const { Student, Profile } = require('../utils/db');
+const { DataTypes } = require('sequelize');
+const BaseModel = require('./base.model')
 
-class StudentProfile {
-  static async createProfile(userId, profileData) {
-    const user = await Student.findByPk(userId);
-    if (!user) {
-      throw new Error('Student not found');
+class Profile extends BaseModel {
+  constructor (kwargs={}) {
+    super();
+
+    for (const key in kwargs) {
+      this[key] = kwargs[key];
     }
-
-    // Create a new profile for the user
-    const profile = await Profile.create(profileData);
-    await user.setProfile(profile);
-
-    return profile;
   }
 
-  static async get(userId) {
-    const user = await Student.findByPk(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    const profile = await user.getProfile();
-    return profile;
+  static init(dbClient) {
+    return super.init({
+      id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+      },
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      dateOfBirth: DataTypes.DATE,
+      address: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      profilePicture: DataTypes.STRING,
+    }, {
+      sequelize: dbClient,
+      modelName: 'Profile',
+    });
   }
 
-  static async update(userId, updatedProfileData) {
-    // Find the user
-    const user = await Student.findByPk(userId);
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    // Get the associated profile
-    const profile = await user.getProfile();
-
-    if (!profile) {
-      throw new Error('User does not have a profile');
-    }
-
-    // Update the profile data
-    Object.assign(profile, updatedProfileData);
-
-    // Save the changes to the database
-    await profile.save();
-
-    return profile;
+  static associate(models) {
+    Profile.belongsTo(models.Student, { foreignKey: 'studentId' });
   }
 }
 
-module.exports = StudentProfile;
+module.exports = Profile;
