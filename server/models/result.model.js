@@ -1,49 +1,45 @@
-const dbClient = require('../utils/db').Result;
-const { Course } = require('../utils/db');
+const { DataTypes } = require('sequelize');
+const BaseModel = require('./base.model');
 
-class Result {
-  static async createResult(resultData) {
-    try {
-      // const student = await Student.findByPk(studentId);
-      // const course = await Course.findByPk(courseId);
-  
-      // if (!student || !course) {
-      //   throw new Error('Student or course not found');
-      // }
 
-      // Create a new result
-      const result = await dbClient.create(resultData);
-  
-      return result;
-    } catch (error) {
-      console.error('Error creating result:', error);
-      throw error;
+class Result extends BaseModel {
+  constructor(kwargs = {}) {
+    super();
+
+    for (const key in kwargs) {
+      this[key] = kwargs[key];
     }
   }
 
-  // get result
-  static async getResult(studentId, courseId) {
-    const result = await dbClient.findOne({
-      where: {
-        studentId,
-        courseId,
+  static init(dbClient) {
+    return super.init({
+      id: {
+        type: DataTypes.STRING,
+        defaultValue: () => uuidv4(),
+        primaryKey: true,
       },
-      include: [Course],
+      score: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      GP: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      grade: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      remarks: DataTypes.STRING,
+    }, {
+      sequelize: dbClient,
+      modelName: 'Result'
     });
-
-    return result;
   }
 
-  // gets all the result of a student
-  static async getResults(studentId) {
-    const results = await dbClient.findAll({
-      where: {
-        studentId,
-      },
-      include: [Course],
-    });
-
-    return results;
+  static associate(models) {
+    Result.belongsTo(models.Student, { foreignKey: 'studentId' });
+    Result.belongsTo(models.Course, { foreignKey: 'courseId' });
   }
 }
 
