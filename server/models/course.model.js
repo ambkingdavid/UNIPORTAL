@@ -1,73 +1,37 @@
-const { Op } = require('sequelize');
-const dbClient = require('../utils/db').Course;
+const { DataTypes } = require('sequelize');
+const BaseModel = require('./base.model');
+const CourseRegistration = require('./coureRegistration.model');
 
 
-class Course {
-  //adds a course to the database
-  static async create(data) {
-    try {
-      const course = await dbClient.create(data);
-      const {
-        createdAt: cousreCreatedAt,
-        updatedAt: courseUpdatedAt,
-        ...courseData
-      } = course.dataValues;
-      return courseData;
-    } catch (err) {
-      throw err;
+class Course extends BaseModel {
+  constructor (kwargs={}) {
+    for (const key in kwargs) {
+      this[key] = kwargs[key];
     }
   }
 
-  // gets a course with the courseId
-  static async getCourseById(courseId) {
-    try {
-      const course = await dbClient.findByPk(courseId);
-      return course;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  // gets a course by name
-  static async getCourseByName(courseName) {
-    try {
-      const course = await dbClient.findOne({
-        where: {
-          courseName,
-        },
-      });
-      return course;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  // gets a list of courses from the database
-  static async getCourses(courses) {
-    const courseList = await dbClient.findAll({
-      where: {
-        courseName: {
-          [Op.in] : courses,
-        },
+  static init (dbClient) {
+    return super.init({
+      id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
       },
+      courseCode: DataTypes.STRING,
+      courseName: DataTypes.STRING,
+      unit: DataTypes.INTEGER,
+    }, {
+      sequelize: dbClient,
+      modelName: 'Course',
     });
-    return courseList;
   }
 
-  // gets all courses from the database
-  static async getAllCourses() {
-    const courseList = await dbClient.findAll({});
-    return courseList;
-  }
-
-  //gets students that are registered to a course
-  static async getStudents(courseId) {
-    const course = await dbClient.findByPk(courseId);
-    if (course) {
-      const students = course.getStudents();
-      return students;
-    }
-    return null;
+  static associate(models) {
+    Course.hasMany(models.Result, { foreignKey: 'courseId' });
+    Course.hasMany(models.Resource, { foreignKey: 'courseId' });
+    Course.belongsToMany(models.Student, {
+      through: CourseRegistration,
+      foreignKey: 'courseId',
+    });
   }
 }
 
